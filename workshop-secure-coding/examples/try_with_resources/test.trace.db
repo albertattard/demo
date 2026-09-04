@@ -1,0 +1,3 @@
+2025-06-18 15:17:53.823446-07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CATALOGUE" not found; SQL statement:
+SELECT * FROM catalogue [42102-232]

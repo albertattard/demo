@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title layout:title-pattern="Café Voyage - $CONTENT_TITLE">Café Voyage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            container: {
+              center: true,
+              padding: { DEFAULT: '1rem', sm: '1.5rem', lg: '2rem' },
+              screens: { sm:'640px', md:'768px', lg:'1024px', xl:'72rem', '2xl':'72rem' } // ~1152px
+            }
+          }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"
+            integrity="sha384-ZBXiYtYQ6hJ2Y0ZNoYuI+Nq5MqWBr+chMrS/RkXpNzQCApHEhOt2aY8EJgqwHLkJ"
+            crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gradient-to-b from-sky-50 to-sky-100 text-gray-800 min-h-screen font-sans">
+<header class="bg-white shadow">
+    <!-- container -->
+    <div class="container py-6 flex items-center justify-between">
+        <div class="flex items-center">
+            <img src="/images/Duke.gif" alt="Duke Logo" class="h-14 w-auto mr-2"/>
+            <a href="https://www.oracle.com/java/java-se-subscription/value-engineering/" target="_blank">
+                <img src="/images/Java.png" alt="Oracle Java" class="h-14 w-auto mr-2"/>
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-sky-700 flex items-center"> Café Voyage</h1>
+                <p class="text-sm text-gray-500">From coffee talk to world walk.</p>
+            </div>
+        </div>
+        <nav class="space-x-6">
+            <a id="nav-home" th:href="@{/}" class="text-gray-600 hover:text-sky-700 font-medium">Home</a>
+            <a id="nav-chat" th:href="@{/chat}" class="text-gray-600 hover:text-sky-700 font-medium">AI Assistant</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container my-10" layout:fragment="content"></main>
+
+<footer class="border-t">
+    <div class="container py-6 flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm space-y-3 md:space-y-0">
+        <div class="flex space-x-6">
+            <a href="https://learn.java" target="_blank" class="hover:text-sky-700">learn.java</a>
+            <a href="https://dev.java" target="_blank" class="hover:text-sky-700">dev.java</a>
+            <a href="https://inside.java" target="_blank" class="hover:text-sky-700">inside.java</a>
+        </div>
+        <div class="space-x-6">
+            <a th:href="@{/terms}" class="hover:text-sky-700 font-medium">Terms of Use</a>
+            <span>© <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Café Voyage</span>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

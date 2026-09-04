@@ -1,0 +1,30 @@
+[  
+    {  
+        "name":"Alice",
+        "city":"Berlin",
+        "role":"Teacher"
+        "staff":[]
+    },
+    {
+        "name":"Bob",
+        "city":"Cologne",
+        "role":"Manager"
+        "staff":["Alice", "Cindy"]
+    },
+    {
+        "name":"Cindy",
+        "city":"Dallas",
+        "role":"Assistant"
+        "staff":[]
+    },
+    {
+        "name":"David",
+        "city":"Oslo",
+        "role":"Sales"
+        "staff":["Helen"]
+    },
+    {
+        "name":"Ellen",
+        "city":"Paris",
+    }
+]

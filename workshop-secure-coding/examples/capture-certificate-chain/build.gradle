@@ -1,0 +1,32 @@
+plugins {
+    id 'application'
+}
+        
+group = 'demo'
+version = '1.0-SNAPSHOT'
+        
+repositories {
+    mavenCentral()
+}
+        
+dependencies {
+    implementation group: 'org.slf4j', name:'slf4j-api', version: '2.0.17'
+    implementation group: 'ch.qos.logback', name:'logback-classic', version: '1.5.17'
+
+    testImplementation 'org.testng:testng:7.9.0' // Check for latest version
+}
+        
+test {
+    useTestNG()
+}
+        
+application {
+    mainClass = 'demo.Main'
+}
+        
+jar {
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+}
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Strings mapped with OWASP Encoder</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container my-2" align="center">
+            <h3>String Encoding</h3>
+            <form action="#" th:action-"@{/}" th:object="${DemoString}" method="POST">
+                <input type="text" th:field="*{string}" placeholder="enter term to encode..." class="form-control mb-4">
+                <button type="submit" class="btn btn-info col-2">Encode</button>
+            </form>
+            <br/>
+            <table style="width:80%" border="1" class = "table table-striped table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>Encoding method</th>
+                        <th>result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr> <td>(none)</td> <td th:text="${DemoString.string}"></td> </tr>
+                    <tr> <td>forJava</td> <td th:text="${DemoString.forJava}"></td> </tr>
+                    <tr> <td>forXml</td> <td th:text="${DemoString.forXml}"></td> </tr>
+                    <tr> <td>forJavaScript</td> <td th:text="${DemoString.forJavaScript}"></td> </tr>
+                    <tr> <td>forHtml</td> <td th:text="${DemoString.forHtml}"></td> </tr>
+                    <tr> <td>forHtmlAttribute</td> <td th:text="${DemoString.forHtmlAttribute}"></td> </tr>
+                    <tr> <td>forCDATA</td> <td th:text="${DemoString.forCDATA}"></td> </tr>
+                    <tr> <td>forCssString</td> <td th:text="${DemoString.forCssString}"></td> </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

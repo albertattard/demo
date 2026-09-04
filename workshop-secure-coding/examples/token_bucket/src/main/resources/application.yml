@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: 'URL_data_leak'
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.web: DEBUG

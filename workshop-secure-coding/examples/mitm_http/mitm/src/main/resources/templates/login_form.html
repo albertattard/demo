@@ -1,0 +1,12 @@
+<DOCTYPE HTML>
+<html>
+    <body>
+        <form action="#" th:action="@{/login}" th:object="${loginDto}" method="post" th:target="_top">
+            <label for="fname">First name:</label><input type="text" id="fname" th:field="*{fname}"><br/>
+            <label for="lname">Last name:</label><input type="text" id="lname" th:field="*{lname}"><br/>
+            <label for="pwd">Password:</label><input type="password" id="pwd" th:field="*{pwd}"><br/>
+            <br/>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

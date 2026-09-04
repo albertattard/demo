@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.oracle.jsc.owasp</groupId>
+    <artifactId>owasp_dependency_check</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>owasp_dependency_check</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>25</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+
+        <!-- Change this value to a remediated release to compare scanner results. -->
+        <log4j2.version>2.15.0</log4j2.version>
+        <junit.version>6.1.3</junit.version>
+
+        <dependency-check.version>13.0.0</dependency-check.version>
+        <dependency-check.failBuildOnCVSS>8</dependency-check.failBuildOnCVSS>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+        <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
+        <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
+        <required.maven.version>3.8.1</required.maven.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                        <arg>-Xdiags:verbose</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check.version}</version>
+                <configuration>
+                    <failBuildOnCVSS>${dependency-check.failBuildOnCVSS}</failBuildOnCVSS>
+                    <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+                    <ossIndexAnalyzerEnabled>false</ossIndexAnalyzerEnabled>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-third-party</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <failOnMissing>true</failOnMissing>
+                            <failOnBlacklist>false</failOnBlacklist>
+                            <excludedScopes>test</excludedScopes>
+                            <includedLicenses>
+                                <!-- Apache 2 -->
+                                <includedLicense>Apache License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache Software License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache License, Version 2.0</includedLicense>
+                                <includedLicense>Apache 2.0</includedLicense>
+                                <includedLicense>Apache License 2.0</includedLicense>
+                                <includedLicense>Apache License Version 2.0</includedLicense>
+                                <includedLicense>Apache-2.0</includedLicense>
+                                <!-- MIT -->
+                                <includedLicense>MIT</includedLicense>
+                                <includedLicense>MIT License</includedLicense>
+                                <includedLicense>The MIT License</includedLicense>
+                                <!-- BSD-3-Clause and its Eclipse Distribution License aliases -->
+                                <includedLicense>BSD-3-Clause</includedLicense>
+                                <includedLicense>EDL 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License - v 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License v. 1.0</includedLicense>
+                            </includedLicenses>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required.maven.version}</version>
+                                    <message>Maven ${required.maven.version}+ is required. Use the Maven Wrapper or upgrade your Maven installation.</message>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[${java.version},)</version>
+                                    <message>Java ${java.version}+ is required.</message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

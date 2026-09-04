@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Page unavailable | BOLA workshop</title>
+    <link rel="stylesheet" th:href="@{/css/workshop.css}">
+</head>
+<body class="error-page">
+<main class="error-panel">
+    <div class="eyebrow">Secure coding workshop</div>
+    <p class="error-code" th:text="${status ?: 500}">404</p>
+    <h1 th:if="${status == 404}">We could not find that order</h1>
+    <h1 th:unless="${status == 404}">Something went wrong</h1>
+    <p th:if="${status == 404}">The requested address does not identify an available order.</p>
+    <p th:unless="${status == 404}">The request could not be completed. Please return to your orders and try again.</p>
+    <a href="/">Return to your orders</a>
+</main>
+</body>
+</html>

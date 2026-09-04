@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: broken-object-level-authorization
+  datasource:
+    url: jdbc:h2:mem:bola;MODE=PostgreSQL
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  sql:
+    init:
+      mode: always

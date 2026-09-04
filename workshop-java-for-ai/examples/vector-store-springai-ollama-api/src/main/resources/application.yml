@@ -1,0 +1,16 @@
+spring:
+  main:
+    web-application-type: none
+  ai:
+    model:
+      embedding: ollama
+    ollama:
+      base-url: http://localhost:11434
+      embedding:
+        options:
+          model: mxbai-embed-large
+
+logging:
+  level:
+    demo: TRACE
+    org.zalando.logbook: TRACE

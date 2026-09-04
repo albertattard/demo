@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DIY Store</title>
+    <link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<main>
+    <h1>DIY Store</h1>
+    <p>Search our DIY product catalogue or describe a project for a generic recommendation brief.</p>
+
+    <form th:object="${productSearch}" method="post">
+        <label for="query">What are you looking for?</label>
+        <input id="query" th:field="*{query}" type="search" required
+               th:attr="aria-invalid=${#fields.hasErrors('query')},aria-describedby=${#fields.hasErrors('query') ? 'query-error' : null}">
+        <p id="query-error" class="error" th:if="${#fields.hasErrors('query')}"
+           th:errors="*{query}" role="alert"></p>
+        <div class="form-actions">
+            <button type="submit" th:formaction="@{/search}" formmethod="get">Search catalogue</button>
+            <button type="submit" th:formaction="@{/recommend}">Get recommendation</button>
+        </div>
+    </form>
+
+    <section th:if="${products != null}" aria-labelledby="results-heading">
+        <h2 id="results-heading">Search results</h2>
+        <p th:if="${#lists.isEmpty(products)}">No products match your search.</p>
+        <ul th:unless="${#lists.isEmpty(products)}">
+            <li th:each="product : ${products}">
+                <h3 th:text="${product.name}">Interior matt paint</h3>
+                <p th:text="${product.description}">Durable white paint for interior walls.</p>
+                <p><strong>Keywords:</strong> <span th:text="${product.keywords}">paint, wall</span></p>
+            </li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,39 @@
+spring:
+  main:
+    web-application-type: none
+  config:
+    import: optional:file:${user.home}/.chatgpt/openai-api.yml
+  ai:
+    model:
+      chat: openai
+    openai:
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.2
+          max-tokens: 500
+    mcp:
+      client:
+        request-timeout: 60s
+        stdio:
+          connections:
+            filesystem:
+              command: '${MCP_CONTAINER_COMMAND:docker}'
+              args:
+                - 'run'
+                - '--interactive'
+                - '--rm'
+                # Mount your host folder into the container at /data
+                # Use :ro for read-only; remove :ro if your tools need write access
+                - "--mount"
+                - "type=bind,src=${user.dir}/data,dst=/data,ro${MCP_CONTAINER_MOUNT_SUFFIX:}"
+                - '${MCP_CONTAINER_IMAGE:docker.io/mcp/rust-mcp-filesystem}'
+                - '/data'
+
+        toolcallback:
+          enabled: true
+
+logging:
+  level:
+    demo: TRACE
+    org.zalando.logbook: TRACE

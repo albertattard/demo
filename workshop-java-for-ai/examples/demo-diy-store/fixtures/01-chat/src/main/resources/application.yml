@@ -1,0 +1,15 @@
+spring:
+  config:
+    import: optional:file:${user.home}/.openai/openai-api.yml
+  ai:
+    model:
+      chat: openai
+    openai:
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.2
+
+logging:
+  level:
+    demo: DEBUG

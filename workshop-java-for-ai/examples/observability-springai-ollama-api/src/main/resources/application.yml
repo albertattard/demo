@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: Demo - Observability | Spring AI | Ollama
+  ai:
+    model:
+      chat: ollama
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama2
+    chat:
+      observations:
+        log-prompt: true
+        log-completion: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+    export:
+      otlp:
+        enabled: true
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4317
+          transport: grpc
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+logging:
+  level:
+    demo: TRACE
+    org.zalando.logbook: TRACE

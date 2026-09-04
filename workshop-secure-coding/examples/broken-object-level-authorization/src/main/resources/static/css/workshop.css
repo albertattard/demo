@@ -1,0 +1,95 @@
+:root {
+    color: #202534;
+    background: #f5f7fb;
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+body { margin: 0; }
+
+main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+a { color: #2c67b1; font-weight: 650; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+    border: 0;
+    border-radius: .45rem;
+    padding: .65rem .9rem;
+    background: #e9edf5;
+    color: #30394a;
+    cursor: pointer;
+    font: inherit;
+}
+
+button:hover { background: #d9e1ef; }
+
+.eyebrow {
+    color: #a34b11;
+    font-size: .8rem;
+    font-weight: 750;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+h1 { margin: .45rem 0 .75rem; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; }
+.intro { max-width: 620px; color: #545d70; font-size: 1.1rem; line-height: 1.65; }
+.session { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin: 2rem 0; padding: 1rem 1.2rem; border: 1px solid #d8dfec; border-radius: .8rem; background: #fff; }
+.session strong, .route-id { color: #2c67b1; }
+.routes { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.route { display: block; padding: 1.3rem; border: 1px solid #d8dfec; border-radius: .8rem; background: #fff; color: inherit; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+.route:hover { box-shadow: 0 10px 25px #243b6520; transform: translateY(-2px); text-decoration: none; }
+.route-id { font-size: .85rem; font-weight: 750; }
+.route h3 { margin: .35rem 0; font-size: 1.2rem; }
+.route p { margin: 0; color: #697386; line-height: 1.45; }
+.notice { margin-top: 2rem; padding: 1rem 1.2rem; border-left: 4px solid #e68a21; border-radius: .35rem; background: #fff8ee; color: #674014; line-height: 1.5; }
+
+.order-page { max-width: 680px; }
+.back { display: inline-block; margin-bottom: 2rem; }
+.card { overflow: hidden; border: 1px solid #d8dfec; border-radius: .9rem; background: #fff; box-shadow: 0 14px 36px #243b6514; }
+.card-header { padding: 1.8rem; background: #fff8ee; border-bottom: 1px solid #f0d5b8; }
+.badge { display: inline-block; padding: .3rem .6rem; border-radius: 999px; background: #ffe0bc; color: #8a3d09; font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.card h1 { margin: .7rem 0 0; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+.account { margin: .6rem 0 0; color: #6b5b4b; }
+.details { display: grid; gap: 1rem; padding: 1.8rem; }
+.detail { display: grid; gap: .25rem; padding-bottom: 1rem; border-bottom: 1px solid #edf0f5; }
+.detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.label { color: #6b7485; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.value { font-size: 1.1rem; font-weight: 650; }
+.order-form { display: grid; gap: .75rem; margin: 0 1.8rem 1.8rem; padding: 1.25rem; border-radius: .7rem; background: #f5f7fb; }
+.order-form label { color: #485365; font-weight: 700; }
+.order-form input { box-sizing: border-box; width: 100%; border: 1px solid #bfc9d9; border-radius: .45rem; padding: .7rem; background: #fff; color: inherit; font: inherit; }
+.order-form input:focus { outline: 3px solid #b9d5f6; border-color: #2c67b1; }
+.order-form button { justify-self: start; background: #2c67b1; color: #fff; font-weight: 700; }
+.order-form button:hover { background: #23538f; }
+
+.auth-page { display: grid; min-height: 100vh; place-items: center; padding: 1.5rem; box-sizing: border-box; }
+.auth-panel { width: min(100%, 430px); padding: 2.25rem; border: 1px solid #d8dfec; border-radius: .9rem; background: #fff; box-shadow: 0 14px 36px #243b6514; }
+.auth-panel h1 { margin-top: .45rem; font-size: clamp(2rem, 6vw, 2.8rem); }
+.auth-panel p { color: #545d70; line-height: 1.55; }
+.login-form { display: grid; gap: 1rem; margin-top: 1.75rem; }
+.login-form label { display: grid; gap: .4rem; color: #485365; font-weight: 700; }
+.login-form input { box-sizing: border-box; width: 100%; border: 1px solid #bfc9d9; border-radius: .45rem; padding: .75rem; color: inherit; font: inherit; }
+.login-form input:focus { outline: 3px solid #b9d5f6; border-color: #2c67b1; }
+.login-form button { margin-top: .25rem; background: #2c67b1; color: #fff; font-weight: 700; }
+.login-form button:hover { background: #23538f; }
+.login-error { margin: 1.25rem 0 0; padding: .75rem; border-left: 4px solid #c84b31; border-radius: .3rem; background: #fff0ed; color: #8e2f1b; }
+.workshop-credentials { margin-top: 1.5rem; padding: 1rem; border-radius: .6rem; background: #f5f7fb; color: #545d70; font-size: .9rem; line-height: 1.5; }
+
+.error-page { display: grid; min-height: 100vh; place-items: center; padding: 1.5rem; box-sizing: border-box; }
+.error-panel { width: min(100%, 560px); padding: 2.5rem; border: 1px solid #d8dfec; border-radius: .9rem; background: #fff; box-shadow: 0 14px 36px #243b6514; text-align: center; }
+.error-code { margin: 0; color: #a34b11; font-size: clamp(4rem, 16vw, 7rem); font-weight: 800; line-height: 1; }
+.error-panel h1 { margin: 1rem 0 .75rem; font-size: clamp(1.8rem, 5vw, 2.6rem); }
+.error-panel p { margin: 0 auto; max-width: 440px; color: #545d70; line-height: 1.6; }
+.error-panel a { display: inline-block; margin-top: 1.5rem; padding: .7rem 1rem; border-radius: .45rem; background: #2c67b1; color: #fff; }
+.error-panel a:hover { background: #23538f; text-decoration: none; }
+
+@media (max-width: 520px) {
+    main { padding-top: 2rem; }
+    .session { align-items: flex-start; flex-direction: column; }
+    .auth-panel { padding: 1.5rem; }
+    .error-panel { padding: 1.75rem; }
+}

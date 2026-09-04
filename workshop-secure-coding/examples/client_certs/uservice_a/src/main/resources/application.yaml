@@ -1,0 +1,20 @@
+service:
+    message: "Hello, World, from µ-service a!"
+
+server:
+    port: 443
+    ssl:
+        key-store-type: "PKCS12"
+        key-store: "service-a.p12"
+        key-store-password: "service_a-password"
+        key-alias: "service-a"
+        enabled: true
+    http:
+        port: 80
+
+client-a:
+    ssl:
+        trust-store: "../ca-truststore.p12"
+        trust-store-password: "ca-truststore-pass"
+        key-store: "service-a.p12"
+        key-store-password: "service_a-password"

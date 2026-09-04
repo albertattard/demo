@@ -1,0 +1,13 @@
+service:
+    message: "Hello, World!"
+
+server:
+    port: 443
+    ssl:
+        key-store-type: "PKCS12"
+        key-store: "server.p12"
+        key-store-password: "mitm-server-password"
+        key-alias: "server"
+        enabled: true
+    http:
+        port: 80

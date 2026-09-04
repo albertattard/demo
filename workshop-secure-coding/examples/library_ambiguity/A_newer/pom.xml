@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>demo</groupId>
+    <artifactId>A</artifactId>
+    <version>1.1.0</version>
+    <packaging>jar</packaging>
+    <name>A</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>25</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+
+        <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
+        <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
+        <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
+        <required.maven.version>3.6.3</required.maven.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-third-party</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <failOnMissing>true</failOnMissing>
+                            <failOnBlacklist>false</failOnBlacklist>
+                            <excludedScopes>test</excludedScopes>
+                            <includedLicenses>
+                                <!-- Apache 2 -->
+                                <includedLicense>Apache License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache Software License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache License, Version 2.0</includedLicense>
+                                <includedLicense>Apache 2.0</includedLicense>
+                                <includedLicense>Apache License 2.0</includedLicense>
+                                <includedLicense>Apache License Version 2.0</includedLicense>
+                                <includedLicense>Apache-2.0</includedLicense>
+                                <!-- MIT -->
+                                <includedLicense>MIT</includedLicense>
+                                <includedLicense>MIT License</includedLicense>
+                                <includedLicense>The MIT License</includedLicense>
+                                <!-- BSD-3-Clause and its Eclipse Distribution License aliases -->
+                                <includedLicense>BSD-3-Clause</includedLicense>
+                                <includedLicense>EDL 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License - v 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License v. 1.0</includedLicense>
+                            </includedLicenses>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required.maven.version}</version>
+                                    <message>Maven ${required.maven.version}+ is required. Use the Maven Wrapper or upgrade your Maven installation.</message>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[${java.version},)</version>
+                                    <message>Java ${java.version}+ is required.</message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

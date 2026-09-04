@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order detail</title>
+    <link rel="stylesheet" th:href="@{/css/workshop.css}">
+</head>
+<body>
+<main class="order-page">
+    <a class="back" href="/">← Back to workshop routes</a>
+    <article class="card">
+        <header class="card-header">
+            <div class="badge" th:text="${mode == 'vulnerable'} ? 'Vulnerable route' : 'Fixed route'">Order route</div>
+            <h1>Order <span th:text="${order.id}">1001</span></h1>
+            <p class="account">Signed in as <strong th:text="${username}">user</strong></p>
+        </header>
+        <section class="details" aria-label="Order details">
+            <div class="detail"><span class="label">Description</span><span class="value" th:text="${order.description}">description</span></div>
+            <div class="detail"><span class="label">Owner</span><span class="value" th:text="${order.owner.username}">owner</span></div>
+        </section>
+        <form class="order-form" th:action="@{/order/{id}(id=${order.id})}" method="post">
+            <label for="description">Update description</label>
+            <input id="description" name="description" th:value="${order.description}">
+            <button type="submit">Update order</button>
+        </form>
+    </article>
+    <aside class="notice">The links are intentionally predictable. Change an order ID in the address bar to examine the authorization boundary.</aside>
+</main>
+</body>
+</html>
