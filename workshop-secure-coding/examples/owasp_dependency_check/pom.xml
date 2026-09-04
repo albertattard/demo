@@ -15,7 +15,7 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
 
         <!-- Change this value to a remediated release to compare scanner results. -->
-        <log4j2.version>2.15.0</log4j2.version>
+        <log4j2.version>2.25.4</log4j2.version>
         <junit.version>6.1.3</junit.version>
 
         <dependency-check.version>13.0.0</dependency-check.version>
