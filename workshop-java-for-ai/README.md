@@ -40,6 +40,14 @@ measurements relevant to their specific use case.
 Please refer to the [examples `README.md` file](./examples/README.md) for a
 complete list of examples.
 
+### Pending
+
+- Build presentation
+- Add predictive AI example ([JSR381](https://jcp.org/en/jsr/detail?id=381))
+- Add Generative AI examples, such as a support chatbot.
+- https://www.inceptionlabs.ai/
+- https://app.greptile.com/
+
 ---
 
 ## Feedback and Support

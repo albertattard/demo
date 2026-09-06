@@ -35,52 +35,105 @@ measurements relevant to their specific use case.
 
 - [Oracle Java 25](https://www.oracle.com/java/technologies/downloads/#java25)
 
-## Examples
+## Complete examples
 
-1. [Simple Neural Network](./simple-neural-network/README.md)
-2. [Prompt - Ollama API](./prompt-ollama-api/README.md)
-3. [Prompt - ChatGPT API](./prompt-chatgpt-api/README.md)
-4. [Prompt - Gemini API](./prompt-gemini-api/README.md)
-5. [Prompt - Cohere command-a API](./prompt-command-a-api/README.md)
-6. [Prompt - OCI Generic API](./prompt-oci-generic-api/README.md)
+End-to-end applications that combine several AI capabilities in a realistic
+workflow.
+
+1. [DIY Store: AI-assisted product recommendations](./demo-diy-store/README.md)
+   — Builds a web application through chat, vision, evaluation, RAG, and tool
+   calling.
+
+## Individual examples
+
+1. [Simple Neural Network](./simple-neural-network/README.md) — Implements a
+   small neural network without an AI framework.
+2. [Prompt - Ollama API](./prompt-ollama-api/README.md) — Sends a prompt to a
+   local Ollama model.
+3. [Prompt - ChatGPT API](./prompt-chatgpt-api/README.md) — Sends a prompt to
+   an OpenAI model.
+4. [Prompt - Gemini API](./prompt-gemini-api/README.md) — Sends a prompt to a
+   Gemini model.
+5. [Prompt - Cohere command-a API](./prompt-command-a-api/README.md) — Sends a
+   prompt to Cohere Command A.
+6. [Prompt - OCI Generic API](./prompt-oci-generic-api/README.md) — Sends a
+   prompt to an OCI-hosted model.
 7. [Temperature - Gemini using REST API](./temperature-gemini-rest/README.md)
-8. [Temperature - Gemini using API](./temperature-gemini-api/README.md)
+   — Compares Gemini responses at different temperatures through REST.
+8. [Temperature - Gemini using API](./temperature-gemini-api/README.md) —
+   Compares Gemini responses at different temperatures through its Java API.
 9. [Prompt - LangChain4J and Ollama API](./prompt-langchain4j-ollama-api/README.md)
+   — Sends an Ollama prompt through LangChain4J.
 10. [Prompt - LangChain4J and ChatGPT API](./prompt-langchain4j-chatgpt-api/README.md)
+    — Sends an OpenAI prompt through LangChain4J.
 11. [Prompt - LangChain4J and Gemini API](./prompt-langchain4j-gemini-api/README.md)
+    — Sends a Gemini prompt through LangChain4J.
 12. [Prompt - LangChain4J and OCI Generic API](./prompt-langchain4j-oci-generic-api/README.md)
+    — Sends an OCI prompt through LangChain4J.
 13. [Prompt - Spring AI and Ollama API](./prompt-springai-ollama-api/README.md)
+    — Sends an Ollama prompt through Spring AI.
 14. [Prompt - Spring AI and ChatGPT API](./prompt-springai-chatgpt-api/README.md)
+    — Sends an OpenAI prompt through Spring AI.
 15. [Types of Prompt - LangChain4J - Ollama API](./types-of-prompt-langchain4j-ollama-api/README.md)
+    — Compares prompt forms supported by LangChain4J.
 16. [Templates - LangChain4j and Ollama API](./templates-langchain4j-ollama-api/README.md)
+    — Fills reusable LangChain4J prompt templates.
 17. [Templates - Spring AI and Ollama API](./templates-springai-ollama-api/README.md)
+    — Fills reusable Spring AI prompt templates.
 18. [Roles - LangChain4J and Ollama API](./roles-langchain4j-ollama-api/README.md)
+    — Uses system and user roles in LangChain4J.
 19. [Roles - Spring AI and Ollama API](./roles-springai-ollama-api/README.md)
+    — Uses system and user roles in Spring AI.
 20. [AI Services - LangChain4J - Ollama](./ai-services-langchain4j-ollama-api/README.md)
+    — Declares a Java service interface backed by an Ollama model.
 21. [Task - Prompt - Llama2 using the Ollama API](./prompt-ollama-api-task/README.md)
+    — Exercises sending a Llama 2 prompt through Ollama.
 22. [Task - Roles - LangChain4J and Ollama API](./roles-langchain4j-ollama-api-task/README.md)
+    — Exercises role-based prompting through LangChain4J.
 23. [History - LangChain4J - System Message](./history-langchain4j-system-message/README.md)
+    — Preserves a system message across a conversation.
 24. [History - LangChain4J - Ollama](./history-langchain4j-ollama-api/README.md)
+    — Preserves conversational history with an Ollama model.
 25. [Task - History - LangChain4J - Ollama](./history-langchain4j-ollama-api-task/README.md)
+    — Exercises conversational history with Ollama.
 26. [History - Spring AI - Ollama](./history-springai-ollama-api/README.md)
+    — Preserves conversational history through Spring AI.
 27. [Streaming - LangChain4J and ChatGPT API](./streaming-langchain4j-chatgpt-api/README.md)
+    — Streams an OpenAI response through LangChain4J.
 28. [Structured Output - Spring AI and Ollama API](./structured-output-springai-ollama-api/README.md)
+    — Maps an Ollama response to a Java type.
 29. [Tools - Spring AI and ChatGPT API](./tools-springai-chatgpt-api/README.md)
-30. [MCP Server - Spring AI and ChatGPT API](./mcp-server-stdio-springai-chatgpt-api/README.md)
-31. [MCP Server - Spring AI and ChatGPT API](./mcp-server-streamable-http-springai-chatgpt-api/README.md)
+    — Lets an OpenAI model invoke application tools.
+30. [MCP Server - Spring AI and ChatGPT API](./mcp-server-stdio-springai/README.md)
+    — Exposes Spring AI tools over MCP standard input and output.
+31. [MCP Server - Spring AI and ChatGPT API](./mcp-server-streamable-http-springai/README.md)
+    — Exposes Spring AI tools over MCP Streamable HTTP.
 32. [MCP Client - Spring AI and ChatGPT API](./mcp-client-springai-chatgpt-api/README.md)
-33. [Audio - Spring AI and Ollama API](./audio-springai-chatgpt-api/README.md)
+    — Connects an OpenAI prompt to an MCP server.
+33. [Audio - Spring AI and ChatGPT API](./audio-springai-chatgpt-api/README.md)
+    — Synthesises and transcribes speech with OpenAI.
 34. [Image to Text - LangChain4J - Ollama (llava:7b)](./multi-modal-langchain4j-ollama-api-image-to-text/README.md)
+    — Describes an image with a local LLaVA model.
 35. [Image to Text - Spring AI - Ollama (llava:7b)](./multi-modal-springai-ollama-api-image-to-text/README.md)
+    — Describes an image with LLaVA through Spring AI.
 36. [Multi-modal - Text and Audio - Spring AI - gpt-4o-audio-preview](./multi-modal-springai-chatgpt-api-audio-and-text/README.md)
+    — Combines text and audio in an OpenAI request.
 37. [Vector Store - Spring AI and Ollama API](./vector-store-springai-ollama-api/README.md)
+    — Stores and searches document embeddings locally.
 38. [Retrieval-Augmented Generation (RAG) - Spring AI and Ollama API](./rag-springai-ollama-api/README.md)
+    — Grounds an Ollama response in retrieved documents.
 39. [Bias - LangChain4J - Ollama API](./bias-langchain4j-ollama-api/README.md)
+    — Demonstrates biased model responses and prompt influence.
 40. [Hallucination - LangChain4J - Ollama API](./hallucination-langchain4j-ollama-api/README.md)
+    — Demonstrates unsupported model-generated claims.
 41. [Hallucination - LangChain4j - Ollama API - AI as a Judge](./hallucination-langchain4j-ollama-api-ai-as-a-judge/README.md)
+    — Uses a model to assess a response for hallucination.
 42. [Hallucination - Spring AI - Ollama API - AI as a Judge](./hallucination-springai-ollama-api-ai-as-judge/README.md)
+    — Uses a Spring AI judge to assess hallucination.
 43. [Safeguard - Spring AI and Ollama API](./safeguard-springai-ollama-api/README.md)
+    — Applies input and output safety checks.
 44. [Observability - Spring AI and Ollama API](./observability-springai-ollama-api/README.md)
+    — Records model interactions for inspection.
 
 ### Pending Examples
 

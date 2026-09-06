@@ -33,7 +33,7 @@ class ModelConfiguration {
     ChatModel chatModel(final DemoProperties properties, final OllamaApi ollamaApi) {
         return OllamaChatModel.builder()
                 .ollamaApi(ollamaApi)
-                .defaultOptions(OllamaChatOptions.builder()
+                .options(OllamaChatOptions.builder()
                         .model(properties.getChat().getModel())
                         .temperature(properties.getChat().getTemperature())
                         .build())
@@ -44,7 +44,7 @@ class ModelConfiguration {
     ChatModel judgeModel(final DemoProperties properties, final OllamaApi ollamaApi) {
         return OllamaChatModel.builder()
                 .ollamaApi(ollamaApi)
-                .defaultOptions(OllamaChatOptions.builder()
+                .options(OllamaChatOptions.builder()
                         .model(properties.getJudge().getModel())
                         .temperature(properties.getJudge().getTemperature())
                         .build())

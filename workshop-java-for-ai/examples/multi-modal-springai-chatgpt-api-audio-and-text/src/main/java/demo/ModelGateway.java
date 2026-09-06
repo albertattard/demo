@@ -5,9 +5,9 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi.ChatCompletionRequest.AudioParameters;
-import org.springframework.ai.openai.api.OpenAiApi.ChatCompletionRequest.AudioParameters.AudioResponseFormat;
-import org.springframework.ai.openai.api.OpenAiApi.ChatCompletionRequest.AudioParameters.Voice;
+import org.springframework.ai.openai.OpenAiChatOptions.AudioParameters;
+import org.springframework.ai.openai.OpenAiChatOptions.AudioParameters.AudioResponseFormat;
+import org.springframework.ai.openai.OpenAiChatOptions.AudioParameters.Voice;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
@@ -36,8 +36,7 @@ class ModelGateway {
                                 .build()))
                 .options(OpenAiChatOptions.builder()
                         .outputModalities(List.of("text", "audio"))
-                        .outputAudio(new AudioParameters(Voice.ALLOY, AudioResponseFormat.MP3))
-                        .build())
+                        .outputAudio(new AudioParameters(Voice.ALLOY, AudioResponseFormat.MP3)))
                 .call()
                 .chatResponse();
 
