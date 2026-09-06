@@ -179,9 +179,9 @@ change. Stop and resolve a failure in this section before continuing.
 
 2. **Run the application locally.**
 
-  This starts the executable JAR in the background, writes its output to
-  `target/application.log`, and records its process ID for the stop step. If it
-  exits immediately, inspect that log before continuing.
+   This starts the executable JAR in the background, writes its output to
+   `target/application.log`, and records its process ID for the stop step. If it
+   exits immediately, inspect that log before continuing.
 
    ```shell
    java -jar './target/demo-supermarket-1.0.0.jar' > './target/application.log' 2>&1 &
@@ -1000,7 +1000,7 @@ not invoke a skill merely to see what it does.
    acceptance criteria owned by TASK-007.
 
    ```markdown
-   Updated [TASK-004](/private/tmp/demo-supermarket/docs/tasks/TASK-004-guest-checkout-and-order-confirmation.md:16) with all settled decisions and made the acceptance criteria testable. I also updated [TASK-007](/private/tmp/demo-supermarket/docs/tasks/TASK-007-pickup-checkout-validation-and-failure-handling.md:19) to own trimming explicitly, avoiding a dangling dependency on TASK-004.
+   Updated [TASK-004](docs/tasks/TASK-004-guest-checkout-and-order-confirmation.md:16) with all settled decisions and made the acceptance criteria testable. I also updated [TASK-007](docs/tasks/TASK-007-pickup-checkout-validation-and-failure-handling.md:19) to own trimming explicitly, avoiding a dangling dependency on TASK-004.
 
    Verified dependent TASK-005, TASK-006, and TASK-007; no requirements were left dangling. `git diff --check` passes.
 
