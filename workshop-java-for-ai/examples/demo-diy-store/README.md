@@ -112,8 +112,8 @@ journey before adding any AI capabilities.
 
 1. Build and verify the current application.
 
-  This performs a clean build and runs the automated tests for the conventional
-  catalogue-search journey.
+   This performs a clean build and runs the automated tests for the conventional
+   catalogue-search journey.
 
    ```shell
    ./mvnw clean verify
@@ -121,8 +121,8 @@ journey before adding any AI capabilities.
 
 2. Start the application.
 
-  The command runs the packaged application in the background and waits until
-  the home page is available.
+   The command runs the packaged application in the background and waits until
+   the home page is available.
 
    ```shell
    # Start the application in the background
@@ -145,13 +145,13 @@ journey before adding any AI capabilities.
 
 3. Open [http://localhost:8080](http://localhost:8080) in a browser.
 
-  Search for `paint` and confirm that the catalogue returns matching products,
-  such as “Interior matt paint” and “Paint roller set”.
+   Search for `paint` and confirm that the catalogue returns matching products,
+   such as “Interior matt paint” and “Paint roller set”.
 
-  ![Search paint](assets/images/landing-page-search-paint.png)
+   ![Search paint](assets/images/landing-page-search-paint.png)
 
-  At this point the search matches literal product names and keywords only; it
-  does not yet understand a DIY project request.
+   At this point the search matches literal product names and keywords only; it
+   does not yet understand a DIY project request.
 
 4. Stop the application to free port 8080 before applying the first fixture.
 
@@ -435,18 +435,18 @@ match the customer’s intended DIY task rather than only literal keywords.
    ```
 
 3. This checkpoint uses both `gpt-4o-mini` for chat and `text-embedding-3-small`
-  for embeddings, as configured in `application.yml`. Configure OpenAI as in
-  Step 1 before starting the application. Starting the application embeds the
-  H2 catalogue, and every generated retrieval query makes an embedding request.
+   for embeddings, as configured in `application.yml`. Configure OpenAI as in
+   Step 1 before starting the application. Starting the application embeds the
+   H2 catalogue, and every generated retrieval query makes an embedding request.
 
-  A recommendation makes one chat request to turn the customer’s request into
-  retrieval-friendly queries. When that structured response marks the request
-  as unsupported, no vector search is made. Otherwise, a second chat request
-  selects product IDs only from the retrieved documents. The application
-  rejects the whole recommendation when the model returns an ID that was not
-  retrieved, then fetches the accepted IDs from H2 and renders the existing
-  product-results view. All OpenAI requests are paid and their output can vary
-  between runs.
+   A recommendation makes one chat request to turn the customer’s request into
+   retrieval-friendly queries. When that structured response marks the request
+   as unsupported, no vector search is made. Otherwise, a second chat request
+   selects product IDs only from the retrieved documents. The application
+   rejects the whole recommendation when the model returns an ID that was not
+   retrieved, then fetches the accepted IDs from H2 and renders the existing
+   product-results view. All OpenAI requests are paid and their output can vary
+   between runs.
 
 4. Start the local Spring Boot application:
 
@@ -491,9 +491,9 @@ returned product IDs before displaying any recommendations.
 
 1. Apply the local-tool-calling checkpoint.
 
-  This is not an MCP example: the `search_catalogue` tool runs inside the DIY
-  Store application. The model can ask it to search the in-memory vector store
-  before selecting catalogue product IDs.
+   This is not an MCP example: the `search_catalogue` tool runs inside the DIY
+   Store application. The model can ask it to search the in-memory vector store
+   before selecting catalogue product IDs.
 
    ```shell
    rsync --archive fixtures/05-tools/ ./
@@ -501,38 +501,39 @@ returned product IDs before displaying any recommendations.
 
 2. Build and test the application.
 
-  The tests mock the tool-calling interaction and verify that the model
-  receives only the customer question before it calls `search_catalogue`. They
-  reject an ID outside the application’s catalogue retrieval and prove that
-  only an ID returned by application-owned catalogue retrieval reaches the
-  existing product-results view. No OpenAI credentials or paid requests are
-  needed.
+   The tests mock the tool-calling interaction and verify that the model
+   receives only the customer question before it calls `search_catalogue`. They
+   reject an ID outside the application’s catalogue retrieval and prove that
+   only an ID returned by application-owned catalogue retrieval reaches the
+   existing product-results view. No OpenAI credentials or paid requests are
+   needed.
 
    ```shell
    ./mvnw clean verify
    ```
 
 3. This checkpoint still uses `gpt-4o-mini` for chat and
-  `text-embedding-3-small` for the `SimpleVectorStore`, as configured in
-  `application.yml`. Configure OpenAI as in Step 1 before starting the
-  application. Start it with `-Ddemo.tools.enabled=true` to replace the default
-  RAG recommendation flow with local tool calling. The model decides whether
-  and when to invoke `search_catalogue`; this is non-deterministic. Each
-  catalogue search makes a paid embedding request, and the tool-calling
-  exchange makes paid chat requests. The application logs each local tool’s
-  name and returned data, then renders only products with verified catalogue
-  IDs.
+   `text-embedding-3-small` for the `SimpleVectorStore`, as configured in
+   `application.yml`. Configure OpenAI as in Step 1 before starting the
+   application. Start it with `-Ddemo.tools.enabled=true` to replace the default
+   RAG recommendation flow with local tool calling. The model decides whether
+   and when to invoke `search_catalogue`; this is non-deterministic. Each
+   catalogue search makes a paid embedding request, and the tool-calling
+   exchange makes paid chat requests. The application logs each local tool’s
+   name and returned data, then renders only products with verified catalogue
+   IDs.
 
 4. Start the local Spring Boot application with tool calling enabled.
 
-  Open [http://localhost:8080](http://localhost:8080), enter
-  `What do I need to paint my living room?`, and select **Get recommendation**.
-  Inspect the application log to see the model-selected tool calls. The normal
-  path should search the catalogue before using any product ID.
+   Open [http://localhost:8080](http://localhost:8080), enter
+   `What do I need to paint my living room?`, and select **Get recommendation**.
+   Inspect the application log to see the model-selected tool calls. The normal
+   path should search the catalogue before using any product ID.
 
    ```shell
    # Start the application in the background
-   java -Ddemo.tools.enabled=true -jar 'target/demo-diy-store-1.0.0.jar' > './target/application.log' 2>&1 &
+   java -Ddemo.tools.enabled=true \
+     -jar 'target/demo-diy-store-1.0.0.jar' > './target/application.log' 2>&1 &
 
    # Capture its PID so that we can stop the application using it
    echo "$!" > './target/application.pid'
