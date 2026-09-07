@@ -13,6 +13,13 @@ the database lookup to both the requested order ID and the authenticated owner.
 The H2 database, seeded accounts, and credentials are workshop-only fixtures;
 they are not a production-ready identity or data-management design.
 
+For a complementary defence-in-depth measure, see the
+[URL Data Leak](../url-data-leak/) example. It replaces predictable numeric
+identifiers in public URLs with opaque UUIDs, making resource enumeration far
+more difficult. This identifier obfuscation does not replace the ownership
+checks demonstrated here: a leaked UUID must still be subject to object-level
+authorization.
+
 ---
 
 ## Disclaimer
@@ -176,7 +183,7 @@ in-memory database and do not alter system configuration.
    echo $! > 'target/application.pid'
 
    # Wait for the application to start
-   until curl -sf http://localhost:8080/login >/dev/null; do sleep 1; done
+   until curl --silent --fail http://localhost:8080/login >/dev/null; do sleep 1; done
    ```
 
 3. In a browser, sign in as `alice` with password `alice-password`:
@@ -192,7 +199,7 @@ in-memory database and do not alter system configuration.
 
    ![Bob’s order](assets/images/alice-order-1002.png)
 
-   The application displays Bob’s camera order desipre Alice is logged in.
+   The application displays Bob’s camera order despite Alice is logged in.
    Change its description to: `Alice: Table` and submit the form.
 
    ![Bob’s updated order](assets/images/alice-order-1002-updated.png)
@@ -218,7 +225,7 @@ in-memory database and do not alter system configuration.
 
    ```java
    @Test
-   void aliceCannotReadOrChangeBobsOrderThroughTheFixedRoute() throws Exception {
+   void aliceCannotReadOrChangeBobsOrder() throws Exception {
        mockMvc.perform(get("/order/1002").with(user("alice")))
                .andExpect(status().isNotFound());
 
@@ -253,7 +260,7 @@ in-memory database and do not alter system configuration.
    ```
    ...
    [ERROR] Failures:
-   [ERROR]   OrderControllerTests.aliceCannotReadOrChangeBobsOrderThroughTheFixedRoute:74 Status expected:<404> but was:<200>
+   [ERROR]   OrderControllerTests.aliceCannotReadOrChangeBobsOrder:74 Status expected:<404> but was:<200>
    [INFO]
    [ERROR] Tests run: 5, Failures: 1, Errors: 0, Skipped: 0
    [INFO]
@@ -300,7 +307,7 @@ in-memory database and do not alter system configuration.
    echo $! > 'target/application.pid'
 
    attempt=1
-   until curl -sf http://localhost:8080/login >/dev/null; do
+   until curl --silent --fail http://localhost:8080/login >/dev/null; do
      if [ "$attempt" -ge 30 ]; then
        echo 'The application did not start within 30 seconds.' >&2
        tail -n 50 'target/application.log' >&2 || true

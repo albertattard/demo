@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Alice",
+    "city": "Berlin",
+    "role": "Teacher",
+    "staff": ["Bob"]
+  },
+  {
+    "name": "Bob",
+    "city": "Cologne",
+    "role": "Manager",
+    "staff": []
+  }
+]

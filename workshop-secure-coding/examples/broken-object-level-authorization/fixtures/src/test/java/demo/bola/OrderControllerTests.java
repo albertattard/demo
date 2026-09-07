@@ -69,7 +69,7 @@ class OrderControllerTests {
     }
 
     @Test
-    void aliceCannotReadOrChangeBobsOrderThroughTheFixedRoute() throws Exception {
+    void aliceCannotReadOrChangeBobsOrder() throws Exception {
         mockMvc.perform(get("/order/1002").with(user("alice")))
                 .andExpect(status().isNotFound());
 

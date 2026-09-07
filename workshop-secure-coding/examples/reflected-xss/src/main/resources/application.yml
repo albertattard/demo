@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: 'Reflected XSS'
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    demo: DEBUG

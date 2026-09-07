@@ -23,33 +23,33 @@
     </properties>
 
     <modules>
-        <module>api_validation</module>
+        <module>api-validation</module>
         <module>broken-object-level-authorization</module>
-        <module>client_certs</module>
+        <module>client-certs</module>
         <module>construction</module>
         <module>deser_filter</module>
         <module>faulty_exception_handler</module>
-        <module>input_validation</module>
-        <module>jsp_auth</module>
-        <module>library_ambiguity</module>
-        <module>limit_check_overflow</module>
-        <module>mitm_http</module>
+        <module>secure-import-design</module>
+        <module>jsp-auth</module>
+        <module>library-ambiguity</module>
+        <module>limit-check-overflow</module>
+        <module>mitm-http</module>
         <module>module_isolation</module>
         <module>mutable_static</module>
-        <module>mysql_encryption</module>
+        <module>mysql-encryption</module>
         <module>obfuscated_code</module>
-        <module>owasp_dependency_check</module>
-        <module>owasp_java_encoder</module>
+        <module>owasp-dependency-check</module>
+        <module>reflected-xss</module>
         <module>reflection_mutability</module>
         <module>return_values</module>
         <module>sanitizing_log_output</module>
-        <module>secure_jdbc_mysql</module>
+        <module>secure-jdbc-mysql</module>
         <module>serialization_leak</module>
-        <module>sql_injection</module>
-        <module>token_bucket</module>
+        <module>sql-injection</module>
+        <module>token-bucket</module>
         <module>try_with_resources</module>
-        <module>url_data_leak</module>
-        <module>xml_parsing_attack</module>
+        <module>url-data-leak</module>
+        <module>xml-parsing-attack</module>
     </modules>
 
     <build>

@@ -83,30 +83,30 @@ covers a category or that a successful workshop run is production approval.
    An authenticated user changes an order ID to read and update another user’s
    order. Compare an ID-only lookup with an ownership-scoped service and
    repository query.
-2. **[Data Leakage in simple HTTP applications](url_data_leak/README.md)**:
+2. **[Data Leakage in simple HTTP applications](url-data-leak/README.md)**:
    See how predictable object IDs and URLs can disclose catalogue data beyond
    the access a caller was intended to have.
 
 ### A02: Security Misconfiguration
 
-1. **[Secure JDBC](secure_jdbc_mysql/README.md)**: Review MySQL JDBC transport
+1. **[Secure JDBC](secure-jdbc-mysql/README.md)**: Review MySQL JDBC transport
    defaults, TLS requirements, and client trust configuration.
 
 ### A03: Software Supply Chain Failures
 
-1. **[OWASP Dependency-Check](owasp_dependency_check/README.md)**: Find a known
+1. **[OWASP Dependency-Check](owasp-dependency-check/README.md)**: Find a known
    vulnerable Maven dependency and evaluate the scanner result as evidence for a
    human release decision.
-2. **[Library Ambiguity](library_ambiguity/README.md)**: Observe how ambiguous
+2. **[Library Ambiguity](library-ambiguity/README.md)**: Observe how ambiguous
    dependency resolution can load an unintended library version.
 
 ### A04: Cryptographic Failures
 
-1. **[Man in the Middle: mixed mode HTTP/HTTPS](mitm_http/README.md)**:
+1. **[Man in the Middle: mixed mode HTTP/HTTPS](mitm-http/README.md)**:
    Demonstrate why mixed HTTP/HTTPS transport can expose a secure session.
-2. **[Client Certificates for Authentication](client_certs/README.md)**:
+2. **[Client Certificates for Authentication](client-certs/README.md)**:
    Configure mutual TLS between Java services.
-3. **[MySQL Encryption](mysql_encryption/README.md)**: Explore encryption of
+3. **[MySQL Encryption](mysql-encryption/README.md)**: Explore encryption of
    database data and associated key material.
 4. **[Generate Certificates](generate-certificates/README.md)**,
    **[capturing a certificate chain](capture-certificate-chain/README.md)**, and
@@ -115,27 +115,27 @@ covers a category or that a successful workshop run is production approval.
 
 ### A05: Injection
 
-1. **[SQL Injection](sql_injection/README.md)**: Contrast SQL built from an
+1. **[SQL Injection](sql-injection/README.md)**: Contrast SQL built from an
    attacker-controlled search term with a parameterised query.
-2. **[OWASP Java Encoder](owasp_java_encoder/README.md)**: Apply context-aware
-   output encoding to untrusted browser content.
-3. **[XML Parsing Attack](xml_parsing_attack/README.md)**: Bound XML entity
+2. **[Reflected XSS](reflected-xss/README.md)**: Demonstrate unsafe rendering
+   of attacker-controlled HTML and apply context-aware output encoding.
+3. **[XML Parsing Attack](xml-parsing-attack/README.md)**: Bound XML entity
    processing to prevent parser resource exhaustion.
 
 ### A06: Insecure Design
 
-1. **[Input Validation](input_validation/README.md)**: Treat input validation as
+1. **[Secure Import Design](secure-import-design/README.md)**: Treat input validation as
    a design boundary and compare progressively safer implementations.
-2. **[API Validation](api_validation/README.md)**: Validate configuration and
-   responses from a service outside the application’s trust boundary.
-3. **[Limit Check Overflow](limit_check_overflow/README.md)**: Prevent
+2. **[API Validation](api-validation/README.md)**: Require explicit plausibility
+   and freshness controls before API capacity data changes a reservation.
+3. **[Limit Check Overflow](limit-check-overflow/README.md)**: Prevent
    arithmetic overflow from bypassing a service limit.
-4. **[Token Bucket Rate Limiting](token_bucket/README.md)**: Apply rate limiting
+4. **[Token Bucket Rate Limiting](token-bucket/README.md)**: Apply rate limiting
    as a defence against excessive requests.
 
 ### A07: Authentication Failures
 
-1. **[Data Leakage via JSP Whitespace](jsp_auth/README.md)**: See how different
+1. **[Data Leakage via JSP Whitespace](jsp-auth/README.md)**: See how different
    login-failure output can disclose whether a username exists.
 
 ### A08: Software or Data Integrity Failures
@@ -155,7 +155,7 @@ covers a category or that a successful workshop run is production approval.
 1. **[Faulty Exception Handling](faulty_exception_handler/README.md)**: Contrast
    swallowed I/O failures with a fail-fast implementation.
 2. **[Try with Resources](try_with_resources/README.md)**: Compare manual
-   resource cleanup with Java's structured resource management.
+   resource cleanup with Java’s structured resource management.
 
 ### Supporting Java secure-coding practices
 
@@ -175,7 +175,8 @@ OWASP Top 10 category.
 
 ### Pending Examples
 
-TODO: Add the pending examples here
+- **A05 Injection**
+  - Cross Site Scripting
 
 ---
 

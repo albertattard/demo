@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Unsafe HTML Rendering</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-2" align="center">
+    <h1>Unsafe HTML Rendering</h1>
+    <p>Submit text to see how an application can accidentally treat attacker-controlled input as HTML.</p>
+    <form action="#" th:action="@{/}" th:object="${UserInput}" method="POST">
+        <input type="text" th:field="*{message}" placeholder="enter term to encode..." class="form-control mb-4">
+        <button type="submit" class="btn btn-danger col-2">Render</button>
+    </form>
+    <br/>
+    <section aria-labelledby="result-heading">
+        <h2 id="result-heading">Vulnerable result</h2>
+        <p id="attack-proof" role="status">No attacker-controlled JavaScript has executed.</p>
+        <div class="border p-3" th:utext="${UserInput.message}">Submitted text appears here.</div>
+    </section>
+</div>
+</body>
+</html>

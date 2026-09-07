@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML-Encoded Output</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-2" align="center">
+    <h1>HTML-Encoded Output</h1>
+    <p>Submit text to see the attacker-controlled value rendered as text instead of markup.</p>
+    <form action="#" th:action="@{/}" th:object="${UserInput}" method="POST">
+        <input type="text" th:field="*{message}" placeholder="enter text..." class="form-control mb-4">
+        <button type="submit" class="btn btn-success col-2">Render safely</button>
+    </form>
+    <br/>
+    <section aria-labelledby="result-heading">
+        <h2 id="result-heading">Fixed result</h2>
+        <p id="attack-proof" role="status">No attacker-controlled JavaScript has executed.</p>
+        <div class="border p-3" th:utext="${UserInput.htmlEncodedMessage}">Submitted text appears here.</div>
+    </section>
+</div>
+</body>
+</html>
