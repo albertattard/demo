@@ -1,4 +1,12 @@
-.idea/
-target/
+# IDE
+**/.idea
+
+# Build output
+**/target
+
+# Local tools and configuration
 tools/
+**/.local
+
+# Operating-system metadata
 **/.DS_Store
