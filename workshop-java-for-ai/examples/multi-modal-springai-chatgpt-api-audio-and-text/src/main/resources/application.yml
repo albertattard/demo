@@ -1,0 +1,17 @@
+spring:
+  main:
+    web-application-type: none
+  config:
+    import: optional:file:${user.home}/.chatgpt/openai-api.yml
+  ai:
+    model:
+      chat: openai
+    openai:
+      chat:
+        options:
+          model: gpt-4o-audio-preview
+
+logging:
+  level:
+    demo: TRACE
+    org.zalando.logbook: TRACE

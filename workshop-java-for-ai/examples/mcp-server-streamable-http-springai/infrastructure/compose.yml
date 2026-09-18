@@ -1,0 +1,25 @@
+services:
+  mcp-server:
+    container_name: mcp-server
+    build:
+      # The container needs the JAR file, thus we need to use the parent directory as context
+      context: ..
+      dockerfile: "./infrastructure/Dockerfile-MCP-Server"
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+
+  mcp-inspector:
+    container_name: mcp-inspector
+    # https://github.com/modelcontextprotocol/inspector/pkgs/container/inspector
+    image: ghcr.io/modelcontextprotocol/inspector:0.17.3
+    environment:
+      MCP_PROXY_AUTH_TOKEN: "350ba3b5-47f3-475c-83f7-da297dd74ebb"
+      HOST: "0.0.0.0"
+      ALLOWED_ORIGINS: "http://localhost:6274,http://127.0.0.1:6274"
+    ports:
+      - "6274:6274"
+      - "6277:6277"
+    depends_on:
+      - mcp-server
+    restart: unless-stopped

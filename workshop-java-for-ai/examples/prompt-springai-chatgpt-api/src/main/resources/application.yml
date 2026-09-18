@@ -1,0 +1,19 @@
+spring:
+  main:
+    web-application-type: none
+  config:
+    import: optional:file:${user.home}/.chatgpt/openai-api.yml
+  ai:
+    model:
+      chat: openai
+    openai:
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.2
+          max-tokens: 500
+
+logging:
+  level:
+    demo: TRACE
+    org.zalando.logbook: TRACE

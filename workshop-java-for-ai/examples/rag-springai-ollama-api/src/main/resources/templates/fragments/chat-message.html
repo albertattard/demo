@@ -1,0 +1,36 @@
+<!-- src/main/resources/templates/fragments/chat-message.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="pair">
+    <div class="message">
+        <!-- USER -->
+        <div class="flex justify-end mb-2">
+            <div class="max-w-[90%] rounded-2xl px-4 py-2 bg-sky-600 text-white"
+                 th:text="${user.text()}">User
+            </div>
+        </div>
+
+        <!-- ASSISTANT (+ per-turn cards) -->
+        <div class="flex justify-start mb-8">
+            <div class="w-[90%] space-y-4">
+
+                <!-- assistant bubble -->
+                <div class="prose max-w-none w-full rounded-2xl px-4 py-2 bg-gray-100 text-gray-800 border" th:utext="${assistant.text()}">Assistance</div>
+
+                <!-- cards for THIS assistant message -->
+                <div th:if="${assistant.cards() != null and !#lists.isEmpty(assistant.cards())}"
+                     class="grid gap-3 sm:grid-cols-2">
+                    <a th:each="c : ${assistant.cards()}" th:href="@{|${c.path}|}"
+                       class="block rounded-2xl border bg-white p-4 hover:shadow transition">
+                        <div class="text-base font-semibold" th:text="${c.title}">Title</div>
+                        <div class="text-sm text-gray-600 mt-1" th:text="${c.subtitle}">Subtitle</div>
+                        <div class="mt-2 text-sm text-sky-700 font-medium">View details →</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

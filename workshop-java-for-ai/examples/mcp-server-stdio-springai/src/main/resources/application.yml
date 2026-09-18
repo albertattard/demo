@@ -1,0 +1,12 @@
+spring:
+  main:
+    banner-mode: off
+    web-application-type: none
+  ai:
+    mcp:
+      server:
+        stdio: true
+
+logging:
+  level:
+    root: ERROR

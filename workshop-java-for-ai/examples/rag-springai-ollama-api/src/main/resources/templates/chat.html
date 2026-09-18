@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Chat with AI Assistant</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6">
+        <a th:href="@{/}" class="hover:text-sky-700">Home</a>
+        <span class="mx-2">/</span>
+        <span>Chat with Bianca - the AI Assistant</span>
+    </nav>
+
+    <!-- Hero -->
+    <header class="mb-8">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-sky-900">Chat with Bianca, the AI Assistant</h1>
+        <p class="mt-2 text-lg text-gray-600">Bianca, our AI assistant, is here to help you explore
+            <a th:href="@{/search}" class="underline text-sky-600 hover:text-sky-800 visited:text-sky-600" target="_blank">
+                our holiday catalogue </a>
+            and find your perfect getaway. While Bianca strives to provide accurate information, occasional errors may
+            occur, so all offers will be confirmed by one of our representatives.</p>
+    </header>
+
+    <!-- Messages -->
+    <div id="messages"
+         class="w-full bg-white border rounded-2xl p-4 h-[52vh] overflow-y-auto shadow-sm flex flex-col gap-4 sm:gap-5">
+        <div th:each="m : ${history}">
+
+            <!-- USER -->
+            <div th:if="${m instanceof T(demo.chat.DialogueMessage.User)}" class="flex justify-end mb-2">
+                <div class="max-w-[90%] rounded-2xl px-4 py-2 bg-sky-600 text-white"
+                     th:text="${m.text()}">User
+                </div>
+            </div>
+
+            <!-- ASSISTANT (+ per-turn cards) -->
+            <div th:if="${m instanceof T(demo.chat.DialogueMessage.Assistant)}" class="flex justify-start mb-8">
+                <div class="w-[90%] space-y-4">
+
+                    <!-- assistant bubble -->
+                    <div class="prose max-w-none w-full rounded-2xl px-4 py-2 bg-gray-100 text-gray-800 border" th:utext="${m.text()}">Assistance</div>
+
+                    <!-- cards for THIS assistant message -->
+                    <div th:if="${m.cards() != null and !#lists.isEmpty(m.cards())}"
+                         class="grid gap-3 sm:grid-cols-2">
+                        <a th:each="c : ${m.cards()}" th:href="@{|${c.path}|}"
+                           class="rounded-2xl border bg-white p-4 hover:shadow transition flex flex-col h-full">
+                            <div class="text-base font-semibold" th:text="${c.title}">Title</div>
+                            <div class="text-sm text-gray-600 mt-1" th:text="${c.subtitle}">Subtitle</div>
+                            <div class="mt-auto pt-2 text-sm text-sky-700 font-medium">View details →</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Composer -->
+    <form class="mt-6"
+          hx-post="/chat/message"
+          hx-target="#messages"
+          hx-swap="beforeend"
+          hx-indicator="#sending-indicator"
+          hx-disabled-elt="find input[type='text'], find button"
+          hx-on::after-request="this.reset(); document.getElementById('chat-input').focus();">
+
+        <label for="chat-input" class="sr-only">Type a message</label>
+
+        <!-- same look & feel as Home -->
+        <div class="flex w-full items-stretch rounded-2xl bg-white border shadow-sm overflow-hidden">
+            <input id="chat-input"
+                   name="text"
+                   type="text"
+                   required
+                   autocomplete="off"
+                   placeholder="e.g. Family ski week in March under 2,500"
+                   class="flex-1 px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-amber-300">
+            <button type="submit"
+                    class="px-5 py-3 text-lg font-medium bg-amber-600 text-white hover:bg-amber-700 focus:outline-none disabled:bg-gray-400 disabled:cursor-not-allowed">
+                Send
+            </button>
+        </div>
+    </form>
+
+    <!-- Actions: clear (low prominence) -->
+    <div class="mt-3 flex gap-3 text-sm text-gray-500">
+        <form hx-post="/chat/reset" hx-target="#messages" hx-swap="innerHTML" class="inline">
+            <button type="submit"
+                    class="rounded-lg border border-gray-200 px-3 py-1.5 hover:text-red-600 hover:border-red-300">
+                Clear chat
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+spring:
+  main:
+    web-application-type: none
+  ai:
+    model:
+      chat: ollama
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama2
+
+logging:
+  level:
+    demo: DEBUG
+    org.zalando.logbook: TRACE
+    org.springframework.ai.chat.client.advisor: DEBUG
