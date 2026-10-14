@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${offer.title}">Offer</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6">
+        <a th:href="@{/}" class="hover:text-sky-700">Home</a>
+        <span class="mx-2">/</span>
+        <a th:href="@{/demo}" class="hover:text-cyan-700">Demo</a>
+        <span class="mx-2">/</span>
+        <span th:text="${offer.title}">Offer</span>
+    </nav>
+
+    <!-- Hero -->
+    <header class="mb-8">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-sky-900"
+            data-offer-title
+            th:text="${offer.title}">Title</h1>
+        <p class="mt-2 text-lg text-gray-600" th:text="${offer.subtitle}">Subtitle</p>
+    </header>
+
+    <!-- Content grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+
+        <!-- MAIN -->
+        <main class="md:col-span-2 space-y-8">
+
+            <!-- Description -->
+            <section th:if="${offer.description}">
+                <h2 class="text-xl font-semibold text-gray-900 mb-3">Overview</h2>
+                <div class="rounded-2xl bg-white border p-5 leading-relaxed text-gray-800 whitespace-pre-line"
+                     th:text="${offer.description}">
+                    Description…
+                </div>
+            </section>
+
+            <!-- Highlights -->
+            <section th:if="${offer.highlights != null and !#lists.isEmpty(offer.highlights)}">
+                <h2 class="text-xl font-semibold text-gray-900 mb-3">Trip Highlights</h2>
+                <ul class="rounded-2xl bg-white border p-5 grid sm:grid-cols-2 gap-3">
+                    <li th:each="h : ${offer.highlights}" class="flex items-start gap-2">
+                        <span class="mt-1 inline-block h-2.5 w-2.5 rounded-full bg-cyan-600"></span>
+                        <span class="text-gray-800" th:text="${h.highlight}">Highlight</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Itinerary -->
+            <section th:if="${offer.itinerary != null and !#lists.isEmpty(offer.itinerary)}">
+                <h2 class="text-xl font-semibold text-gray-900 mb-3">Detailed Itinerary</h2>
+                <div class="space-y-4">
+                    <div th:each="i : ${offer.itinerary}"
+                         class="rounded-2xl bg-white border p-5">
+                        <h3 class="font-bold text-gray-900 mb-2" th:text="${i.title}">Day X — Title</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li th:each="e : ${i.entries}" class="text-gray-800"
+                                th:text="${e.description}">Entry
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Package Includes -->
+            <section th:if="${offer.packageDetails != null and !#lists.isEmpty(offer.packageDetails)}">
+                <h2 class="text-xl font-semibold text-gray-900 mb-3">What’s Included</h2>
+                <ul class="rounded-2xl bg-white border p-5 list-disc pl-5 space-y-1 text-gray-800">
+                    <li th:each="p : ${offer.packageDetails}" th:text="${p.description}">Item</li>
+                </ul>
+            </section>
+
+            <!-- Best Travel Season -->
+            <section th:if="${offer.bestTravelSeasons != null and !#lists.isEmpty(offer.bestTravelSeasons)}">
+                <h2 class="text-xl font-semibold text-gray-900 mb-3">Best Travel Season</h2>
+                <div class="rounded-2xl bg-white border p-5">
+                    <ul class="space-y-1 text-gray-800">
+                        <li th:each="b : ${offer.bestTravelSeasons}">
+                            <span class="font-medium" th:text="${b.season}">Season</span>
+                            <span class="text-gray-500">—</span>
+                            <span th:text="${b.description}">Description</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- SIDEBAR -->
+        <aside class="md:col-span-1">
+            <div class="rounded-2xl bg-white border p-5 sticky top-6 space-y-4">
+
+                <!-- Price -->
+                <div th:if="${offer.price != null}">
+                    <div class="text-sm text-gray-500">Starting from</div>
+                    <div class="text-3xl font-extrabold text-gray-900">
+                        <span th:text="${#numbers.formatDecimal(offer.price, 1, 'COMMA', 2, 'POINT')} + ' €'">1.234,56 €</span>
+                        <span class="text-base font-semibold text-gray-500">/ person</span>
+                    </div>
+                    <div class="text-sm text-gray-600 mt-1" th:text="${offer.priceDescription}">Price notes</div>
+                </div>
+
+                <!-- CTA -->
+                <div class="pt-2">
+                    <a href="https://www.oracle.com/java/java-se-subscription/value-engineering/" target="_blank"
+                       rel="noreferrer noopener"
+                       class="block text-center w-full rounded-xl bg-cyan-600 text-white py-3 font-medium hover:bg-cyan-700 transition">
+                        Reach out
+                    </a>
+                    <p class="text-xs text-gray-500 mt-2">
+                        This demo showcases how AI can assist in exploring options. Reach out if you’d like to learn
+                        more about your entitlements.
+                    </p>
+                </div>
+
+                <!-- Quick facts (optional; shown if highlights exist) -->
+                <div th:if="${offer.highlights != null and !#lists.isEmpty(offer.highlights)}"
+                     class="border-t pt-4">
+                    <div class="text-sm text-gray-500 mb-2">Quick Highlights</div>
+                    <ul class="space-y-1 text-sm text-gray-800">
+                        <li th:each="h,iter : ${offer.highlights}" th:if="${iter.index < 3}"
+                            class="flex gap-2">
+                            <span class="mt-2 h-1.5 w-1.5 rounded-full bg-cyan-600"></span>
+                            <span th:text="${h.highlight}">Highlight</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t my-8"></div>
+
+    <div class="md:col-span-2 space-y-8">
+        <!-- Why Café Voyage -->
+        <section>
+            <h2 class="text-xl font-semibold text-gray-900 mb-3">Why Café Voyage</h2>
+            <div class="rounded-2xl bg-gray-50 border p-5">
+                <p>
+                    At Café Voyage, our customers always come first. We believe every holiday should be as unique as the
+                    traveler, which is why we take the time to understand your dreams and tailor every detail to match
+                    your wishes.
+                </p>
+                <p class="mt-2">
+                    From handpicked destinations and carefully curated itineraries to personalized support before,
+                    during, and after your trip, we go above and beyond to ensure your journey is seamless and
+                    unforgettable. With our expert knowledge, trusted partners, and genuine passion for creating
+                    memorable experiences, you can relax knowing your perfect holiday is in caring and capable hands.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Us -->
+        <section>
+            <h2 class="text-xl font-semibold text-gray-900 mb-3">Contact Us</h2>
+            <div class="rounded-2xl bg-gray-50 border p-5">
+                <p class="text-gray-900 font-semibold">Let’s Plan Your Dream Trip!</p>
+                <p class="text-gray-700 mt-2">
+                    We’re here to make your next adventure unforgettable. Whether you have questions, need travel
+                    advice,
+                    or are ready to book, our friendly team is just a call or message away.
+                </p>
+
+                <ul class="mt-4 space-y-2 text-gray-800">
+                    <li class="flex items-start gap-2">
+                        <span class="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-cyan-600"></span>
+                        <span><strong>Explore more at </strong>
+                            <a href="https://www.oracle.com/java/java-se-subscription/value-engineering/"
+                               class="text-sky-700 hover:underline" target="_blank" rel="noopener">
+                                www.oracle.com
+                            </a>
+                            – discover all our exciting offerings.
+                        </span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-cyan-600"></span>
+                        <span>
+                            <strong>Email us at </strong>
+                            <a href="mailto:java-value-engineering_us@oracle.com" class="text-sky-700 hover:underline">
+                                java-value-engineering_us@oracle.com</a>
+                            – we’ll get back to you quickly with personalized suggestions.
+                        </span>
+                    </li>
+                </ul>
+
+                <p class="mt-4 font-semibold text-gray-900">
+                    Your perfect holiday is just a conversation away – let’s make it happen!
+                </p>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>

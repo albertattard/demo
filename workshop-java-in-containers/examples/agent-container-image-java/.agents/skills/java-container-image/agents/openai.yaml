@@ -1,0 +1,4 @@
+interface:
+  display_name: "Java Container Image"
+  short_description: "Create verified container images from Java projects."
+  default_prompt: "Create a container image for this Java project using Oracle Java containers."

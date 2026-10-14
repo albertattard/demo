@@ -1,0 +1,5 @@
+**
+!containers/
+!containers/Dockerfile-non-root
+!target/
+!target/container-runtime-hardening-spring-boot-*.jar

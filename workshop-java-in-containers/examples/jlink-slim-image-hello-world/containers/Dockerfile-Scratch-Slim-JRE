@@ -1,0 +1,42 @@
+FROM container-registry.oracle.com/java/jdk:25.0.4.1 AS builder
+
+# binutils provides the tools needed by --strip-debug and to inspect ELF files.
+RUN dnf install -y binutils && dnf clean all
+
+ARG JAVA_MODULES=java.base
+RUN jlink \
+      --output "/opt/jre" \
+      --no-header-files \
+      --no-man-pages \
+      --strip-debug \
+      --add-modules "${JAVA_MODULES}" \
+      --compress=zip-9
+
+# Copy only native dependencies outside the custom runtime from the same
+# Oracle Linux image as the JDK. Preserve their absolute paths for the loader.
+ENV LD_LIBRARY_PATH="/opt/jre/lib:/opt/jre/lib/server:/opt/jre/lib/jli"
+RUN mkdir -p "/opt/rootfs" && \
+    find "/opt/jre" -type f -exec sh -ec 'for binary do \
+      if readelf -h "$binary" >/dev/null 2>&1; then \
+        ldd "$binary" 2>/dev/null | awk '\''/not found/ { print "Missing native library: " $0 > "/dev/stderr"; exit 1 } /=> \// { print $3 } /^[[:space:]]*\// { print $1 }'\''; \
+      fi; \
+    done' sh {} + | sort -u | while IFS= read -r library; do \
+      case "$library" in \
+        /opt/jre/*) ;; \
+        *) cp -L --parents "$library" "/opt/rootfs" ;; \
+      esac; \
+    done
+
+FROM scratch
+WORKDIR "/opt/app"
+
+# Copy the libraries required by the Java custom image
+COPY --from=builder ["/opt/rootfs/", "/"]
+
+# Copy the custom Java image
+COPY --from=builder ["/opt/jre", "/opt/jre"]
+
+ARG JAR_FILE="./target/libs/jlink-slim-image-hello-world-*.jar"
+COPY ["${JAR_FILE}", "app.jar"]
+
+ENTRYPOINT ["/opt/jre/bin/java", "-jar", "app.jar"]

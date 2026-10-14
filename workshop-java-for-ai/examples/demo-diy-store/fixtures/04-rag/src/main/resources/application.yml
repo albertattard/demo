@@ -1,0 +1,23 @@
+spring:
+  config:
+    import: optional:file:${user.home}/.openai/openai-api.yml
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  ai:
+    model:
+      chat: openai
+      embedding: openai
+    openai:
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.2
+      embedding:
+        options:
+          model: text-embedding-3-small
+
+logging:
+  level:
+    demo: DEBUG

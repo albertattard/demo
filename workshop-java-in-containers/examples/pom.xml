@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>demo</groupId>
+    <artifactId>java-container-images-workshop</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>Java Container Images Workshop</name>
+    <description>
+        This project is a collection of simple code examples related to the
+        Java Container Images Workshop.
+    </description>
+
+    <properties>
+        <java.version>25</java.version>
+
+        <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
+        <maven.enforcer.plugin.version>3.6.3</maven.enforcer.plugin.version>
+        <required.maven.version>3.6.3</required.maven.version>
+    </properties>
+
+    <modules>
+        <module>jlink-slim-image-hello-world</module>
+        <module>container-cpu-ergonomics-java</module>
+        <module>compact-object-headers-spring-boot</module>
+        <module>container-diagnostics-spring-boot</module>
+        <module>all-in-one-spring-boot</module>
+        <module>application-lifecycle-spring-boot</module>
+        <module>container-image-hygiene-spring-boot</module>
+        <module>container-runtime-hardening-spring-boot</module>
+        <module>java-command-line-options-spring-boot</module>
+        <module>jlink-slim-image-spring-boot</module>
+        <module>jlink-multi-architecture-spring-boot</module>
+        <module>leyden-aot-cache-spring-boot</module>
+        <module>layered-jar-spring-boot</module>
+        <module>multi-architecture-image-builds-spring-boot</module>
+        <module>agent-container-image-java</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-third-party</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>aggregate-add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <failOnMissing>true</failOnMissing>
+                            <failOnBlacklist>false</failOnBlacklist>
+                            <excludedScopes>test</excludedScopes>
+                            <includedLicenses>
+                                <!-- Apache 2 -->
+                                <includedLicense>Apache License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache Software License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache License, Version 2.0</includedLicense>
+                                <includedLicense>Apache 2.0</includedLicense>
+                                <includedLicense>Apache License 2.0</includedLicense>
+                                <includedLicense>Apache License Version 2.0</includedLicense>
+                                <includedLicense>Apache-2.0</includedLicense>
+                                <!-- MIT -->
+                                <includedLicense>MIT</includedLicense>
+                                <includedLicense>MIT License</includedLicense>
+                                <includedLicense>The MIT License</includedLicense>
+                                <!-- BSD-3-Clause and its Eclipse Distribution License aliases -->
+                                <includedLicense>BSD-3-Clause</includedLicense>
+                                <includedLicense>EDL 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License - v 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License v. 1.0</includedLicense>
+                            </includedLicenses>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven.enforcer.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required.maven.version}</version>
+                                    <message>Maven ${required.maven.version}+ is required. Use the Maven Wrapper or upgrade your Maven installation.</message>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[${java.version},)</version>
+                                    <message>Java ${java.version}+ is required.</message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

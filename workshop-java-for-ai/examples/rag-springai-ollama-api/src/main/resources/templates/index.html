@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Demo</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+        <a th:href="@{/}" class="hover:text-sky-700">Home</a>
+        <span class="mx-2">/</span>
+        <span>Choose Your Journey</span>
+    </nav>
+
+    <!-- Hero -->
+    <header class="mb-8">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-sky-900">
+            Plan Your Trip: Two Ways to Find the Perfect Holiday
+        </h1>
+        <p class="mt-2 text-lg text-gray-600">
+            Compare our classic browsing experience with our AI-assisted journey. Start with a realistic scenario,
+            then choose your preferred path.
+        </p>
+    </header>
+
+    <!-- Scenario Card -->
+    <section aria-labelledby="scenario-title" class="mb-10">
+        <div class="rounded-2xl border bg-white p-6 sm:p-8 shadow-sm">
+            <h2 id="scenario-title" class="text-2xl font-bold text-sky-900">
+                Scenario: Planning a Ski Holiday in February
+            </h2>
+            <p class="mt-3 text-gray-700 leading-relaxed">
+                You’re looking for a <span class="font-medium">one-week ski holiday in late February</span>.
+                Ideally suitable for a family, <span class="font-medium">budget under 2,500</span>, near the slopes,
+                with options for ski school and a heated pool.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <!-- Traditional Path -->
+                <a th:href="@{/search}" id="search-use-case-one-button"
+                   class="inline-flex items-center justify-center rounded-xl border bg-white px-5 py-3 text-base font-medium text-sky-800 hover:shadow focus:outline-none focus:ring-2 focus:ring-sky-300"
+                   aria-label="Explore offers using traditional browsing">
+                    Traditional Path — Browse &amp; Filter
+                </a>
+
+                <!-- AI Enhanced Path (prefill prompt via ?m=...) -->
+                <a th:href="@{/chat}"
+                   class="inline-flex items-center justify-center rounded-xl bg-amber-600 px-5 py-3 text-base font-medium text-white hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                   aria-label="Chat with Bianca to get AI-tailored suggestions">
+                    AI-Enhanced Path — Chat with Bianca
+                </a>
+            </div>
+
+            <!-- Small Note -->
+            <p class="mt-4 text-sm text-gray-500">
+                Tip: Try both paths to see how the experience differs. The AI chat will start with your scenario prefilled.
+            </p>
+        </div>
+    </section>
+
+    <!-- Experience Legend -->
+    <aside class="mt-8 rounded-2xl border bg-white p-5 text-sm text-gray-600">
+        <div class="font-semibold text-gray-800 mb-2">What’s the difference?</div>
+        <ul class="list-disc pl-5 space-y-1">
+            <li><span class="font-medium">Traditional:</span> Browse categories, apply filters, compare offers.</li>
+            <li><span class="font-medium">AI-Enhanced:</span> Describe your needs in natural language. Bianca proposes relevant options, which a human will confirm.</li>
+        </ul>
+    </aside>
+</div>
+</body>
+</html>

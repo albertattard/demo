@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>demo</groupId>
+    <artifactId>java-ai-workshop</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>Java AI Workshop</name>
+    <description>This project is a collection of simple code examples related to the Java AI.</description>
+
+    <properties>
+        <java.version>25</java.version>
+
+        <license-maven-plugin.version>2.7.1</license-maven-plugin.version>
+        <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
+        <required.maven.version>3.6.3</required.maven.version>
+    </properties>
+
+    <modules>
+        <module>ai-services-langchain4j-ollama-api</module>
+        <module>audio-springai-chatgpt-api</module>
+        <module>bias-langchain4j-ollama-api</module>
+        <module>demo-diy-store</module>
+        <module>hallucination-langchain4j-ollama-api</module>
+        <module>hallucination-langchain4j-ollama-api-ai-as-a-judge</module>
+        <module>hallucination-springai-ollama-api-ai-as-judge</module>
+        <module>history-langchain4j-ollama-api</module>
+        <module>history-langchain4j-ollama-api-task</module>
+        <module>history-langchain4j-system-message</module>
+        <module>history-springai-ollama-api</module>
+        <module>mcp-client-springai-chatgpt-api</module>
+        <module>mcp-server-stdio-springai</module>
+        <module>mcp-server-streamable-http-springai</module>
+        <module>multi-modal-langchain4j-ollama-api-image-to-text</module>
+        <module>multi-modal-springai-chatgpt-api-audio-and-text</module>
+        <module>multi-modal-springai-ollama-api-image-to-text</module>
+        <module>observability-springai-ollama-api</module>
+        <module>playground</module>
+        <module>prompt-chatgpt-api</module>
+        <module>prompt-command-a-api</module>
+        <module>prompt-gemini-api</module>
+        <module>prompt-langchain4j-chatgpt-api</module>
+        <module>prompt-langchain4j-gemini-api</module>
+        <module>prompt-langchain4j-oci-generic-api</module>
+        <module>prompt-langchain4j-ollama-api</module>
+        <module>prompt-oci-generic-api</module>
+        <module>prompt-ollama-api</module>
+        <module>prompt-ollama-api-task</module>
+        <module>prompt-springai-chatgpt-api</module>
+        <module>prompt-springai-ollama-api</module>
+        <module>rag-springai-ollama-api</module>
+        <module>roles-langchain4j-ollama-api</module>
+        <module>roles-langchain4j-ollama-api-task</module>
+        <module>roles-springai-ollama-api</module>
+        <module>safeguard-springai-ollama-api</module>
+        <module>simple-neural-network</module>
+        <module>streaming-langchain4j-chatgpt-api</module>
+        <module>structured-output-springai-ollama-api</module>
+        <module>temperature-gemini-api</module>
+        <module>temperature-gemini-rest</module>
+        <module>templates-langchain4j-ollama-api</module>
+        <module>templates-springai-ollama-api</module>
+        <module>tools-springai-chatgpt-api</module>
+        <module>types-of-prompt-langchain4j-ollama-api</module>
+        <module>vector-store-springai-ollama-api</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>aggregate-third-party</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>aggregate-add-third-party</goal>
+                        </goals>
+                        <configuration>
+                            <failOnMissing>true</failOnMissing>
+                            <failOnBlacklist>false</failOnBlacklist>
+                            <excludedScopes>test</excludedScopes>
+                            <includedLicenses>
+                                <!-- Apache 2 -->
+                                <includedLicense>Apache License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache Software License, Version 2.0</includedLicense>
+                                <includedLicense>The Apache License, Version 2.0</includedLicense>
+                                <includedLicense>Apache 2.0</includedLicense>
+                                <includedLicense>Apache License 2.0</includedLicense>
+                                <includedLicense>Apache License Version 2.0</includedLicense>
+                                <includedLicense>Apache-2.0</includedLicense>
+                                <!-- MIT -->
+                                <includedLicense>MIT</includedLicense>
+                                <includedLicense>MIT License</includedLicense>
+                                <includedLicense>The MIT License</includedLicense>
+                                <!-- BSD-3-Clause and its Eclipse Distribution License aliases -->
+                                <includedLicense>BSD-3-Clause</includedLicense>
+                                <includedLicense>EDL 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License - v 1.0</includedLicense>
+                                <includedLicense>Eclipse Distribution License v. 1.0</includedLicense>
+                            </includedLicenses>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required.maven.version}</version>
+                                    <message>Maven ${required.maven.version}+ is required. Use the Maven Wrapper or upgrade your Maven installation.</message>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[${java.version},)</version>
+                                    <message>Java ${java.version}+ is required.</message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

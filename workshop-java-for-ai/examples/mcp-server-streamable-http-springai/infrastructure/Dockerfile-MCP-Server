@@ -1,0 +1,18 @@
+FROM container-registry.oracle.com/os/oraclelinux:9
+
+# Install Java 25 (needed to run the application that provides the tools)
+RUN case "${TARGETARCH:-$(uname -m)}" in \
+        amd64|x86_64) jdk_rpm='https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.rpm' ;; \
+        arm64|aarch64) jdk_rpm='https://download.oracle.com/java/25/latest/jdk-25_linux-aarch64_bin.rpm' ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH:-$(uname -m)}" >&2; exit 1 ;; \
+    esac \
+    && curl --fail --location --silent --show-error --output '/tmp/jdk-25.rpm' "${jdk_rpm}" \
+    && dnf install -y '/tmp/jdk-25.rpm' \
+    && rm -f '/tmp/jdk-25.rpm'
+
+WORKDIR /opt/mcp
+COPY ./target/mcp-server-streamable-http-springai-1.0.0.jar mcp-server-streamable-http-springai-1.0.0.jar
+
+EXPOSE 3001
+
+CMD ["java", "-jar", "mcp-server-streamable-http-springai-1.0.0.jar"]

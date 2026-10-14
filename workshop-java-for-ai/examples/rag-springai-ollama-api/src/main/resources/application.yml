@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: RAG
+
+  datasource:
+    url: jdbc:h2:mem:rag;DB_CLOSE_DELAY=-1
+    username: rag
+    password: rag
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate.format_sql: true
+
+  flyway:
+    locations: classpath:db/migration
+
+  ai:
+    model:
+      chat: ollama
+      embedding: ollama
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama3.1
+      embedding:
+        options:
+          model: nomic-embed-text
+
+logging:
+  level:
+    demo: DEBUG
+    org.zalando.logbook: TRACE
+    org.springframework.ai.chat.client.advisor: DEBUG

@@ -1,0 +1,19 @@
+spring:
+  main:
+    web-application-type: none
+  ai:
+    model:
+      chat: ollama
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: qwen3.5
+      embedding:
+        options:
+          model: nomic-embed-text
+
+logging:
+  level:
+    demo: TRACE
+    org.zalando.logbook: TRACE

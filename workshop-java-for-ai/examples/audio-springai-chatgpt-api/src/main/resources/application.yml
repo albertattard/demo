@@ -1,0 +1,28 @@
+spring:
+  main:
+    web-application-type: none
+  config:
+    import: optional:file:${user.home}/.chatgpt/openai-api.yml
+  ai:
+    model:
+      audio:
+        transcription: openai
+        speech: openai
+    openai:
+      audio:
+        speech:
+          options:
+            model: tts-1
+            voice: alloy              # See: https://www.openai.fm/ for more voices
+            response-format: mp3
+            speed: 1
+        transcription:
+          options:
+            model: whisper-1          # default; kept explicit per docs
+            response-format: json     # json | text | srt | verbose_json | vtt
+            temperature: 0
+
+logging:
+  level:
+    demo: TRACE
+    org.zalando.logbook: TRACE

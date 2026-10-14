@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Offers</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6">
+        <a th:href="@{/}" class="hover:text-sky-700">Home</a>
+        <span class="mx-2">/</span>
+        <a th:href="@{/demo}" class="hover:text-sky-700">Demo</a>
+        <span class="mx-2">/</span>
+        <span>Search</span>
+    </nav>
+
+    <!-- Hero -->
+    <header class="mb-6">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-sky-900">Browse Our Holiday Offers</h1>
+        <p class="mt-2 text-lg text-gray-600">Search, filter, and compare to find the trip that matches your plans.</p>
+    </header>
+
+    <!-- Filters -->
+    <section class="mb-6">
+        <form th:action="@{/search}" method="get" class="grid gap-3 md:grid-cols-6 items-end">
+            <!-- Search -->
+            <div class="md:col-span-4">
+                <input id="q" name="q" type="search" placeholder="Search destinations, titles…"
+                       th:value="${param.q}"
+                       class="mt-1 w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-lg placeholder-gray-400 focus:border-sky-600 focus:ring-2 focus:ring-sky-600 focus:outline-none" />
+            </div>
+
+            <!-- Min price -->
+            <div>
+                <input id="minPrice" name="minPrice" type="number" step="1" min="0" inputmode="numeric"
+                       placeholder="Min price (€)" th:value="${param.minPrice}"
+                       class="mt-1 w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-lg placeholder-gray-400 focus:border-sky-600 focus:ring-2 focus:ring-sky-600 focus:outline-none" />
+            </div>
+
+            <!-- Max price -->
+            <div>
+                <input id="maxPrice" name="maxPrice" type="number" step="1" min="0" inputmode="numeric"
+                       placeholder="Max price (€)" th:value="${param.maxPrice}"
+                       class="mt-1 w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-lg placeholder-gray-400 focus:border-sky-600 focus:ring-2 focus:ring-sky-600 focus:outline-none" />
+            </div>
+
+            <!-- Actions -->
+            <div class="col-span-full flex justify-end gap-3 flex-wrap">
+                <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-sky-600 px-4 py-2 text-white font-medium shadow hover:bg-sky-700">Apply</button>
+                <a th:href="@{/search}" class="inline-flex items-center justify-center rounded-lg border px-4 py-2 font-medium text-gray-700 hover:bg-gray-50">Reset</a>
+                <a th:href="@{/chat}" class="inline-flex items-center justify-center rounded-lg bg-amber-600 px-5 py-2.5 text-white font-semibold shadow hover:bg-amber-700 transition">Try it with AI</a>
+            </div>
+        </form>
+    </section>
+
+    <!-- Results table -->
+    <section class="overflow-x-auto bg-white rounded-2xl border">
+        <table class="min-w-full text-left" data-search-results>
+            <thead class="bg-gray-50 text-gray-700 text-sm">
+            <tr>
+                <th class="px-4 py-3 font-semibold">Title</th>
+                <th class="px-4 py-3 font-semibold">Price</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 text-sm">
+            <tr th:each="o : ${offers}" class="hover:bg-gray-50" data-search-result>
+                <td class="px-4 py-3">
+                    <a th:href="@{|/offer/${o.slug}|}" class="font-semibold text-sky-700 hover:underline" th:text="${o.title}">Title</a>
+                    <div class="text-gray-600" th:text="${o.subtitle}">Subtitle</div>
+                </td>
+                <td class="px-4 py-3">
+                    <span th:text="${#numbers.formatDecimal(o.price, 1, 'COMMA', 2, 'POINT')} + ' €'">1.234,56 €</span>
+                </td>
+            </tr>
+            <!-- Empty state -->
+            <tr th:if="${#lists.isEmpty(offers)}">
+                <td class="px-4 py-6 text-center text-gray-500" colspan="2">No offers found. Try adjusting your filters.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DIY Store</title>
+    <link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<main>
+    <h1>DIY Store</h1>
+    <p>Search our DIY product catalogue, describe a project, or upload a photo of a DIY problem.</p>
+
+    <form th:object="${productSearch}" method="post">
+        <label for="query">What are you looking for?</label>
+        <input id="query" th:field="*{query}" type="search" required
+               th:attr="aria-invalid=${#fields.hasErrors('query')},aria-describedby=${#fields.hasErrors('query') ? 'query-error' : null}">
+        <p id="query-error" class="error" th:if="${#fields.hasErrors('query')}"
+           th:errors="*{query}" role="alert"></p>
+        <div class="form-actions">
+            <button type="submit" th:formaction="@{/search}" formmethod="get">Search catalogue</button>
+            <button type="submit" th:formaction="@{/recommend}">Get recommendation</button>
+        </div>
+    </form>
+
+    <form method="post" th:action="@{/infer-tasks}" enctype="multipart/form-data">
+        <label for="photo">Upload a photo of a DIY problem</label>
+        <input id="photo" name="photo" type="file" accept="image/jpeg" required
+               aria-describedby="photo-help photo-error">
+        <p id="photo-help">JPEG only; maximum 5 MB. Photos are not stored.</p>
+        <p id="photo-error" class="error" th:if="${photoError}" th:text="${photoError}" role="alert"></p>
+        <div class="form-actions">
+            <button type="submit">Identify DIY tasks</button>
+        </div>
+    </form>
+
+    <section th:if="${taskInference != null}" aria-labelledby="tasks-heading">
+        <h2 id="tasks-heading">Suggested DIY tasks</h2>
+        <p th:unless="${taskInference.supported}">No supported DIY task could be identified from this photo.</p>
+        <form class="task-choices" th:if="${taskInference.supported}" method="post" th:action="@{/recommend}">
+            <button th:each="task : ${taskInference.taskChoices}" type="submit" name="query"
+                    th:value="${task}" th:text="${task}">Paint an interior wall
+            </button>
+        </form>
+    </section>
+
+    <section th:if="${products != null}" aria-labelledby="results-heading">
+        <h2 id="results-heading">Search results</h2>
+        <p th:if="${#lists.isEmpty(products)}">No products match your search.</p>
+        <ul th:unless="${#lists.isEmpty(products)}">
+            <li th:each="product : ${products}">
+                <h3 th:text="${product.name}">Interior matt paint</h3>
+                <p th:text="${product.description}">Durable white paint for interior walls.</p>
+                <p><strong>Keywords:</strong> <span th:text="${product.keywords}">paint, wall</span></p>
+            </li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

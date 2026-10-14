@@ -1,0 +1,7 @@
+demo:
+  rag:
+    load-catalogue: false
+spring:
+  ai:
+    openai:
+      api-key: test-key-not-used-for-requests
