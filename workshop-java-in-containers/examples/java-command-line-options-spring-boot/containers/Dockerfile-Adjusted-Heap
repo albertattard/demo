@@ -1,0 +1,11 @@
+FROM container-registry.oracle.com/java/jdk:25.0.4.1
+WORKDIR "/opt/app"
+
+ARG JAR_FILE="./target/java-command-line-options-spring-boot-*.jar"
+COPY ["${JAR_FILE}", "app.jar"]
+
+ENV JDK_JAVA_OPTIONS="-XX:MinRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0 -XshowSettings:vm"
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

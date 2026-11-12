@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>demo</groupId>
+    <artifactId>java-concurrency-workshop</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>Java Concurrency Workshop</name>
+    <description>
+        This project is a collection of simple code examples used with the Java Concurrency Workshop.
+    </description>
+
+    <properties>
+        <maven-enforcer-plugin.version>3.7.0</maven-enforcer-plugin.version>
+        <required.maven.version>3.9.0</required.maven.version>
+    </properties>
+
+    <modules>
+        <module>atomic-variables</module>
+        <module>blocking-queue</module>
+        <module>completable-future</module>
+        <module>concurrent-deque</module>
+        <module>concurrent-map</module>
+        <module>concurrent-queue</module>
+        <module>copy-on-write-collections</module>
+        <module>count-down-latch</module>
+        <module>cyclic-barrier</module>
+        <module>exchanger</module>
+        <module>executor-completion-service</module>
+        <module>executor-framework</module>
+        <module>fork-join-pool</module>
+        <module>fundamentals</module>
+        <module>future-task</module>
+        <module>link-verifier</module>
+        <module>lock-support</module>
+        <module>phaser</module>
+        <module>playground</module>
+        <module>reentrant-lock</module>
+        <module>reentrant-lock-condition</module>
+        <module>reentrant-read-write-lock</module>
+        <module>scoped-values</module>
+        <module>semaphore</module>
+        <module>stamped-lock</module>
+        <module>synchronized</module>
+        <module>synchronized-wait-notify</module>
+        <module>thread-and-runnable</module>
+        <module>thread-builders</module>
+        <module>thread-local-variables</module>
+        <module>virtual-thread-scheduler</module>
+        <module>virtual-threads</module>
+        <module>volatile</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required.maven.version}</version>
+                                    <message>Maven ${required.maven.version}+ is required. Use the Maven Wrapper or upgrade your Maven installation.</message>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>${java.version}</version>
+                                    <message>Java ${java.version}+ is required.</message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

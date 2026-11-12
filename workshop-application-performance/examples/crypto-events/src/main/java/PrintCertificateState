@@ -1,0 +1,112 @@
+#!/usr/bin/env -S java --source 25
+
+import jdk.jfr.consumer.RecordedEvent;
+import jdk.jfr.consumer.RecordingFile;
+
+import static java.util.Objects.requireNonNull;
+
+void main(final String[] args) {
+    if (args.length != 1) {
+        System.err.println("Usage: ./PrintCertificateState <RECORDING-FILE>");
+        System.exit(1);
+    }
+
+    final Map<Long, CertificateState> results = compute(Path.of(args[0]));
+
+    results.forEach((id, state) -> {
+        switch (state) {
+            case BEFORE_VALID_FROM -> IO.println("Certificate with id " + id + " is not yet active");
+            case WILL_EXPIRED_IN_LESS_THAN_90_DAYS ->
+                    IO.println("Certificate with id " + id + " will expire in less than 90 days");
+            case WILL_EXPIRED_IN_LESS_THAN_30_DAYS ->
+                    IO.println("Certificate with id " + id + " will expire in less than 30 days");
+            case WILL_EXPIRED_IN_LESS_THAN_7_DAYS ->
+                    IO.println("Certificate with id " + id + " will expire in less than 7 days");
+            case EXPIRED -> IO.println("Certificate with id " + id + " is expired");
+            case VALID -> IO.println("Certificate with id " + id + " is valid");
+        }
+    });
+}
+
+private static Map<Long, CertificateState> compute(final Path path) {
+    final Map<Long, CertificateState> results = new HashMap<>();
+
+    try (RecordingFile recordingFile = new RecordingFile(path)) {
+        while (recordingFile.hasMoreEvents()) {
+            final RecordedEvent event = recordingFile.readEvent();
+
+            if ("jdk.X509Certificate".equals(event.getEventType().getName())) {
+                final long certificateId = event.getValue("certificateId");
+                results.computeIfAbsent(certificateId, key -> CertificateState.of(event));
+            }
+        }
+
+        return results;
+    } catch (final IOException e) {
+        throw new UncheckedIOException("Failed to read recording file " + path, e);
+    }
+}
+
+private enum CertificateState {
+
+    BEFORE_VALID_FROM,
+    EXPIRED,
+    WILL_EXPIRED_IN_LESS_THAN_7_DAYS,
+    WILL_EXPIRED_IN_LESS_THAN_30_DAYS,
+    WILL_EXPIRED_IN_LESS_THAN_90_DAYS,
+    VALID;
+
+    public static CertificateState of(final RecordedEvent event) {
+        requireNonNull(event);
+
+        final String eventName = event.getEventType().getName();
+        if (!"jdk.X509Certificate".equals(eventName)) {
+            throw new IllegalArgumentException("Invalid event type " + eventName);
+        }
+
+        final LocalDateTime validFrom = getValidFromLocalDateTime(event);
+        final LocalDateTime validUntil = getValidUntilLocalDateTime(event);
+        final LocalDateTime referenceDate = LocalDateTime.now();
+
+        return of(validFrom, validUntil, referenceDate);
+    }
+
+    public static CertificateState of(final LocalDateTime validFrom, final LocalDateTime validUntil, final LocalDateTime referenceDate) {
+        requireNonNull(validFrom);
+        requireNonNull(validUntil);
+        requireNonNull(referenceDate);
+
+        if (validFrom.isAfter(validUntil)) {
+            throw new IllegalArgumentException("The valid from date (" + validFrom + ") cannot be after the valid until date (" + validUntil + ')');
+        }
+
+        if (referenceDate.isBefore(validFrom)) {
+            return BEFORE_VALID_FROM;
+        }
+
+        if (referenceDate.isAfter(validUntil)) {
+            return EXPIRED;
+        }
+
+        final long daysToExpire = ChronoUnit.DAYS.between(referenceDate, validUntil);
+        if (daysToExpire < 7) {return WILL_EXPIRED_IN_LESS_THAN_7_DAYS;}
+        if (daysToExpire < 30) {return WILL_EXPIRED_IN_LESS_THAN_30_DAYS;}
+        if (daysToExpire < 90) {return WILL_EXPIRED_IN_LESS_THAN_90_DAYS;}
+
+        return VALID;
+    }
+
+    private static LocalDateTime getValidFromLocalDateTime(final RecordedEvent event) {
+        return getLocalDateTime(event, "validFrom");
+    }
+
+    private static LocalDateTime getValidUntilLocalDateTime(final RecordedEvent event) {
+        return getLocalDateTime(event, "validUntil");
+    }
+
+    private static LocalDateTime getLocalDateTime(final RecordedEvent event, final String name) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(event.getValue(name)), ZONE_ID);
+    }
+
+    private static final ZoneId ZONE_ID = ZoneId.systemDefault();
+}

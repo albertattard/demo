@@ -1,0 +1,83 @@
+#!/usr/bin/env -S java --source 25
+
+import module java.base;
+import module jdk.jfr;
+
+/// ```
+/// ./socket-read-by-method 'cts_issue_16Sep2026.jfr' '10.10.100.199' 'com.imageinfo.'
+/// ```
+public class SocketReadByMethod {
+
+    static void main(final String[] args) throws Exception {
+        if (args.length != 3) {
+            throw new IllegalArgumentException("Usage: SocketReadByMethod <recording.jfr> <remote-address> <application-package-prefix>");
+        }
+
+        final String file = args[0];
+        final String ipAddress = args[1];
+        final String packagePrefix = args[2];
+
+        final Map<String, Totals> totals = new HashMap<>();
+        final Set<EventKey> seen = new HashSet<>();
+
+        try (RecordingFile recording = new RecordingFile(Path.of(file))) {
+            while (recording.hasMoreEvents()) {
+                final RecordedEvent event = recording.readEvent();
+                if (!"jdk.SocketRead".equals(event.getEventType().getName())
+                        || !ipAddress.equals(event.getString("address"))) {
+                    continue;
+                }
+
+                final Duration duration = event.getDuration("duration");
+                final RecordedThread thread = event.getThread("eventThread");
+                final long threadId = thread == null ? -1 : thread.getJavaThreadId();
+                final EventKey key = new EventKey(event.getStartTime(), duration, threadId, ipAddress, event.getLong("bytesRead"));
+
+                if (!seen.add(key)) {continue;}
+
+                final String method = applicationMethod(event.getStackTrace(), packagePrefix);
+                totals.merge(method, new Totals(1, duration, duration),
+                        (left, right) -> left.add(right.total()));
+            }
+        }
+
+        System.out.printf("%-90s %8s %14s %14s%n", "Application method", "Count", "Total wait", "Max wait");
+        totals.entrySet().stream()
+                .sorted(Map.Entry.<String, Totals>comparingByValue(Comparator.comparing(Totals::total)).reversed())
+                .forEach(entry -> System.out.printf("%-90s %8d %14s %14s%n",
+                        entry.getKey(), entry.getValue().count(), format(entry.getValue().total()), format(entry.getValue().max())));
+    }
+
+    private static String format(final Duration duration) {
+        final long milliseconds = duration.toMillis();
+        final long hours = milliseconds / 3_600_000;
+        final long minutes = milliseconds % 3_600_000 / 60_000;
+        final long seconds = milliseconds % 60_000 / 1_000;
+
+        if (hours > 0) return "%dh %02dmin".formatted(hours, minutes);
+        if (minutes > 0) return "%dmin %02ds".formatted(minutes, seconds);
+        if (seconds > 0) return "%ds".formatted(seconds);
+        return "%dms".formatted(milliseconds);
+    }
+
+    private static String applicationMethod(final RecordedStackTrace stackTrace, final String packagePrefix) {
+        if (stackTrace == null) {return "<no stack trace>";}
+
+        for (final RecordedFrame frame : stackTrace.getFrames()) {
+            final RecordedMethod method = frame.getMethod();
+            if (method.getType().getName().startsWith(packagePrefix)) {
+                return method.getType().getName() + "." + method.getName();
+            }
+        }
+
+        return "<no application frame>";
+    }
+
+    private record Totals(long count, Duration total, Duration max) {
+        Totals add(final Duration duration) {
+            return new Totals(count + 1, total.plus(duration), max.compareTo(duration) >= 0 ? max : duration);
+        }
+    }
+
+    private record EventKey(Object startTime, Duration duration, long threadId, String address, long bytesRead) {}
+}

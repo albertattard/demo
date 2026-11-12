@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>demo</groupId>
+    <artifactId>application-performance-workshop</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>Application Performance Workshop</name>
+    <description>
+        This project is a collection of simple code examples related to the
+        Application Performance Workshop.
+    </description>
+
+    <properties>
+        <java.version>25</java.version>
+        <maven-enforcer-plugin.version>3.7.0</maven-enforcer-plugin.version>
+        <required.maven.version>3.9.5</required.maven.version>
+    </properties>
+
+    <modules>
+        <module>continuous-recording</module>
+        <module>crypto-events</module>
+        <module>custom-events</module>
+        <module>socket-io</module>
+        <module>exceptions</module>
+        <module>garbage-collection</module>
+        <module>hot-methods</module>
+        <module>jfr-configuration</module>
+        <module>jfr-metadata</module>
+        <module>jfr-print</module>
+        <module>jfr-scrub</module>
+        <module>jmh-concurrency-benchmark</module>
+        <module>latency</module>
+        <module>memory-leak</module>
+        <module>opentelemetry</module>
+        <module>start-jfr</module>
+        <module>thread-churn</module>
+    </modules>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <defaultGoal>clean package</defaultGoal>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required.maven.version}</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <message>
+                                        This example requires at least Java ${java.version}, update your JVM,
+                                        and run the build again
+                                    </message>
+                                    <version>${java.version}</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

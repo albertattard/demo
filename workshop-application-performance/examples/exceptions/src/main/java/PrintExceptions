@@ -1,0 +1,63 @@
+#!/usr/bin/env -S java --source 25
+
+import jdk.jfr.consumer.RecordedClass;
+import jdk.jfr.consumer.RecordedEvent;
+import jdk.jfr.consumer.RecordingFile;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
+public static void main(final String[] args) {
+    if (args.length != 1) {
+        System.out.println("Usage: ./PrintExceptions <RECORDING-FILE>");
+        System.exit(1);
+    }
+
+    final Path path = Path.of(args[0]);
+    final Map<ExceptionCreated, Long> results = compute(path);
+
+    results.entrySet().stream()
+            .sorted(Map.Entry.<ExceptionCreated, Long>comparingByValue().reversed())
+            .limit(20)
+            .forEach(entry ->
+                    System.out.printf("%5d %-60s %s%n", entry.getValue(),
+                    truncate(entry.getKey().type(), 60),
+                    entry.getKey().message()));
+}
+
+private static Map<ExceptionCreated, Long> compute(final Path path) {
+    final Map<ExceptionCreated, Long> results = new HashMap<>();
+
+    try (RecordingFile recordingFile = new RecordingFile(path)) {
+        while (recordingFile.hasMoreEvents()) {
+            final RecordedEvent event = recordingFile.readEvent();
+
+            /* The jdk.ExceptionThrown event in JFR captures the stack trace from the point where the exception
+                object is instantiated, not where it is actually thrown (i.e., the throw statement). */
+            if ("jdk.JavaExceptionThrow".equals(event.getEventType().getName())) {
+                final String exceptionType = event.<RecordedClass>getValue("thrownClass").getName();
+                final String message = event.getValue("message");
+
+                final ExceptionCreated exceptionCreated = new ExceptionCreated(exceptionType, message);
+                results.merge(exceptionCreated, 1L, Long::sum);
+            }
+        }
+
+        return results;
+    } catch (final IOException e) {
+        throw new UncheckedIOException("Failed to read recording file " + path, e);
+    }
+}
+
+private record ExceptionCreated(String type, String message) {}
+
+public static String truncate(final String original, final int maxLength) {
+    if (maxLength <= original.length()) {
+        return "..." + original.substring(original.length() - maxLength + 3);
+    }
+
+    return original;
+}

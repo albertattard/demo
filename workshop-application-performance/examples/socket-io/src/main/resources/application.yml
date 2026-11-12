@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3307/quotes
+    username: 'demo'
+    password: 'Socket I/O'
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none

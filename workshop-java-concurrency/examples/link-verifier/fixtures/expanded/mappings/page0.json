@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/demo/"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "text/html; charset=utf-8"
+    },
+    "body": "<a href=\"/demo/page1\">Page 1</a><a href=\"/demo/page2\">Page 2</a><a href=\"/demo/page3\">Page 3</a><a href=\"/demo/page4\">Page 4</a><a href=\"/demo/page5\">Page 5</a><a href=\"/demo/page6\">Page 6</a><a href=\"/demo/page1#part\">Duplicate</a><a href=\"/outside\">Outside</a><a href=\"/demo/missing\">Missing</a>",
+    "fixedDelayMilliseconds": 200
+  }
+}

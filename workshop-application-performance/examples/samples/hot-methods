@@ -1,0 +1,72 @@
+#!/usr/bin/env -S java --source 25
+
+import module java.base;
+import module jdk.jfr;
+
+/// Shows the application methods most frequently observed in Java execution samples.
+///
+/// This is sampled Java execution time, not elapsed request time. In particular,
+/// it excludes time spent waiting in native operations such as socket reads.
+///
+/// ```
+/// ./hot-methods 'cts_issue_16Sep2026.jfr' 'com.imageinfo.'
+/// ```
+public class HotMethods {
+
+    static void main(final String[] args) throws Exception {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Usage: HotMethods <recording.jfr> <application-package-prefix>");
+        }
+
+        final Map<String, Long> samplesByMethod = new HashMap<>();
+        final Set<SampleKey> seen = new HashSet<>();
+        final String packagePrefix = args[1];
+        long sampleCount = 0;
+
+        try (RecordingFile recording = new RecordingFile(Path.of(args[0]))) {
+            while (recording.hasMoreEvents()) {
+                final RecordedEvent event = recording.readEvent();
+                if (!"jdk.ExecutionSample".equals(event.getEventType().getName())) {
+                    continue;
+                }
+
+                final RecordedStackTrace stackTrace = event.getStackTrace();
+                final String method = applicationMethod(stackTrace, packagePrefix);
+                final RecordedThread thread = event.getThread("sampledThread");
+                final long threadId = thread == null ? -1 : thread.getJavaThreadId();
+
+                if (!seen.add(new SampleKey(event.getStartTime(), threadId, method))) {
+                    continue;
+                }
+
+                samplesByMethod.merge(method, 1L, Long::sum);
+                sampleCount++;
+            }
+        }
+
+        System.out.println("Sampled Java execution by application method (not elapsed request time)");
+        System.out.printf(Locale.ROOT, "%-100s %10s %12s%n", "Application method", "Samples", "Sample share");
+        final long totalSamples = sampleCount;
+        samplesByMethod.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .forEach(entry -> System.out.printf(Locale.ROOT, "%-100s %10d %11.2f%%%n",
+                        entry.getKey(), entry.getValue(), 100.0 * entry.getValue() / totalSamples));
+    }
+
+    private static String applicationMethod(final RecordedStackTrace stackTrace, final String packagePrefix) {
+        if (stackTrace == null) {
+            return "<no stack trace>";
+        }
+
+        for (final RecordedFrame frame : stackTrace.getFrames()) {
+            final RecordedMethod method = frame.getMethod();
+            if (method.getType().getName().startsWith(packagePrefix)) {
+                return method.getType().getName() + "." + method.getName();
+            }
+        }
+
+        return "<no application frame>";
+    }
+
+    private record SampleKey(Object startTime, long threadId, String method) {}
+}

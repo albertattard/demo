@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "urlPath": "/demo/" },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "text/html; charset=utf-8" },
+    "bodyFileName": "index.html",
+    "fixedDelayMilliseconds": 200
+  }
+}

@@ -1,0 +1,39 @@
+#!/usr/bin/env -S java --source 25
+
+import jdk.jfr.consumer.RecordedEvent;
+import jdk.jfr.consumer.RecordingFile;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+
+public static void main(final String[] args) {
+    if (args.length != 3) {
+        System.err.println("Expected three arguments, but found " + args.length);
+        System.err.println("Usage: java CustomJfrScrubber.java <REGEX> <INPUT-FILE> <OUTPUT-FILE>");
+        System.exit(1);
+    }
+
+    final Predicate<String> filter = Pattern.compile(args[0], Pattern.CASE_INSENSITIVE).asPredicate();
+    final Path input = Path.of(args[1]);
+    final Path output = Path.of(args[2]);
+    final Set<String> events = Set.of("jdk.InitialSystemProperty", "jdk.InitialEnvironmentVariable");
+
+    final Predicate<RecordedEvent> predicate = event -> {
+        final String name = event.getEventType().getName();
+        if (events.contains(name)) {
+            final String value = event.getString("key");
+            return !filter.test(value);
+        }
+        return true;
+    };
+
+    try (RecordingFile file = new RecordingFile(input)) {
+        file.write(output, predicate);
+    } catch (final IOException e) {
+        System.err.println("Failed to scrub events: " + e.getMessage());
+        System.exit(1);
+    }
+}

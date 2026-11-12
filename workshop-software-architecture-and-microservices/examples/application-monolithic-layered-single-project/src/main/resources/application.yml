@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: Layered Monolithic Demo Application
+  datasource:
+    url: jdbc:h2:mem:layered-monolithic-demo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  jpa:
+    hibernate:
+      ddl-auto: none

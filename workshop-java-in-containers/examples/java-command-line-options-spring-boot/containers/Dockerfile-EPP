@@ -1,0 +1,17 @@
+FROM container-registry.oracle.com/os/oraclelinux:10-slim
+
+ARG TARGETARCH
+ARG EPP_VERSION=8u503
+
+COPY ["./binaries/jdk-${EPP_VERSION}-perf-linux-*.rpm", "/tmp/epp/"]
+RUN set -eux; \
+    arch="${TARGETARCH:-$(uname -m)}"; \
+    case "${arch}" in \
+        x86_64) rpm_arch="x64" ;; \
+        amd64) rpm_arch="x64" ;; \
+        aarch64) rpm_arch="aarch64" ;; \
+        arm64) rpm_arch="aarch64" ;; \
+        *) echo "Unsupported architecture: ${arch}" >&2; exit 1 ;; \
+    esac; \
+    rpm --install "/tmp/epp/jdk-${EPP_VERSION}-perf-linux-${rpm_arch}.rpm"; \
+    rm -rf "/tmp/epp"

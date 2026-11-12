@@ -1,0 +1,70 @@
+#!/usr/bin/env -S java --source 25
+
+import jdk.jfr.consumer.*;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+
+public static void main(final String[] args) {
+    if (args.length < 1 || args.length > 2) {
+        System.err.println("Usage: ./PrintHotMethods <RECORDING-FILE> [<METHOD-REGEX>]");
+        System.exit(1);
+    }
+
+    final Path path = Path.of(args[0]);
+    final Predicate<String> predicate = createPredicateFromArgs(args);
+    final Map<String, Long> results = compute(path, predicate);
+
+    results.entrySet().stream()
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .limit(20)
+            .forEach(entry ->
+                    System.out.printf("%5d - %s%n", entry.getValue(), entry.getKey())
+            );
+}
+
+private static Map<String, Long> compute(final Path path, final Predicate<String> predicate) {
+    final Map<String, Long> results = new HashMap<>();
+
+    try (RecordingFile recordingFile = new RecordingFile(path)) {
+        while (recordingFile.hasMoreEvents()) {
+            final RecordedEvent event = recordingFile.readEvent();
+
+            if ("jdk.ExecutionSample".equals(event.getEventType().getName())) {
+                final RecordedStackTrace stackTrace = event.getStackTrace();
+                if (stackTrace == null) {
+                    continue;
+                }
+
+                final List<RecordedFrame> frames = stackTrace.getFrames();
+                for (final RecordedFrame frame : frames) {
+                    final String method = formatFrame(frame);
+                    if (predicate.test(method)) {
+                        results.merge(method, 1L, Long::sum);
+                    }
+                }
+            }
+        }
+    } catch (final IOException e) {
+        throw new UncheckedIOException("Failed to read recording file " + path, e);
+    }
+
+    return results;
+}
+
+private static String formatFrame(final RecordedFrame frame) {
+    final RecordedMethod method = frame.getMethod();
+    return method.getType().getName() + "." + method.getName() + ":" + frame.getLineNumber();
+}
+
+private static Predicate<String> createPredicateFromArgs(final String[] args) {
+    return args.length == 2
+            ? Pattern.compile(args[1]).asMatchPredicate()
+            : t -> true;
+}

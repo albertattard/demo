@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/outside"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "text/html; charset=utf-8"
+    },
+    "body": "<a href=\"/not-followed\">Not followed</a>",
+    "fixedDelayMilliseconds": 200
+  }
+}

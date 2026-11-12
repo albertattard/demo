@@ -1,0 +1,31 @@
+FROM container-registry.oracle.com/java/jdk:25.0.4.1 AS builder
+WORKDIR "/opt/app"
+
+# binutils are needed by the `--strip-debug` command line option
+RUN dnf install -y binutils && dnf clean all
+
+ARG JAVA_MODULES=java.base,java.compiler,java.desktop,java.instrument,java.management,java.naming,java.sql,java.security.jgss,jdk.jcmd,jdk.jfr
+RUN jlink \
+    --output "/opt/jre" \
+    --no-header-files \
+    --no-man-pages \
+    --strip-debug \
+    --add-modules "${JAVA_MODULES}" \
+    --compress=zip-9
+
+ARG JAR_FILE="./target/container-diagnostics-spring-boot-*.jar"
+COPY ["${JAR_FILE}", "app.jar"]
+
+FROM container-registry.oracle.com/os/oraclelinux:10-slim
+WORKDIR "/opt/app"
+
+COPY --from=builder ["/opt/jre", "/opt/jre"]
+COPY --from=builder ["/opt/app/app.jar", "app.jar"]
+
+# Add the custom runtime tools to PATH so `docker exec ... jcmd` works.
+ENV PATH="/opt/jre/bin:${PATH}"
+ENV JDK_JAVA_OPTIONS="-XX:NativeMemoryTracking=summary"
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

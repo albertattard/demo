@@ -1,0 +1,103 @@
+#!/usr/bin/env -S java --source 25
+
+import module java.base;
+import module jdk.jfr;
+
+/// Shows the methods at which Java threads start, grouped across all code.
+///
+/// The report deliberately does not filter to application packages: framework,
+/// driver, and JDK thread creation can all be relevant to a thread-churn issue.
+///
+/// ```
+/// ./thread-start-by-method 'cts_issue_16Sep2026.jfr'
+/// ```
+public class ThreadStartByMethod {
+
+    static void main(final String[] args) throws Exception {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Usage: ThreadStartByMethod <recording.jfr>");
+        }
+
+        final Map<String, Long> startsByMethod = new HashMap<>();
+        final Set<EventKey> seen = new HashSet<>();
+        long threadStartCount = 0;
+
+        try (RecordingFile recording = new RecordingFile(Path.of(args[0]))) {
+            while (recording.hasMoreEvents()) {
+                final RecordedEvent event = recording.readEvent();
+                if (!"jdk.ThreadStart".equals(event.getEventType().getName())) {
+                    continue;
+                }
+
+                final RecordedThread thread = event.getThread("thread");
+                final long threadId = thread == null ? -1 : thread.getJavaThreadId();
+                final String method = startMethod(event.getStackTrace());
+                if (!seen.add(new EventKey(event.getStartTime(), threadId, method))) {
+                    continue;
+                }
+
+                startsByMethod.merge(method, 1L, Long::sum);
+                threadStartCount++;
+            }
+        }
+
+        System.out.println("Thread starts by top recorded method (all packages)");
+        System.out.printf(Locale.ROOT, "%-100s %12s %12s%n", "Method", "Thread starts", "Start share");
+        final long totalStarts = threadStartCount;
+        startsByMethod.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .forEach(entry -> System.out.printf(Locale.ROOT, "%-100s %12d %11.2f%%%n",
+                        entry.getKey(), entry.getValue(), 100.0 * entry.getValue() / totalStarts));
+    }
+
+    private static String startMethod(final RecordedStackTrace stackTrace) {
+        if (stackTrace == null || stackTrace.getFrames().isEmpty()) {
+            return "<no stack trace>";
+        }
+
+        final RecordedMethod method = stackTrace.getFrames().getFirst().getMethod();
+        return method.getType().getName() + "." + method.getName() + parameterList(method.getDescriptor());
+    }
+
+    private static String parameterList(final String descriptor) {
+        final List<String> parameters = new ArrayList<>();
+        for (int index = 1; descriptor.charAt(index) != ')';) {
+            final TypeName type = typeName(descriptor, index);
+            parameters.add(type.name());
+            index = type.nextIndex();
+        }
+        return "(" + String.join(", ", parameters) + ")";
+    }
+
+    private static TypeName typeName(final String descriptor, int index) {
+        int dimensions = 0;
+        while (descriptor.charAt(index) == '[') {
+            dimensions++;
+            index++;
+        }
+
+        final char tag = descriptor.charAt(index++);
+        final String name = switch (tag) {
+            case 'B' -> "byte";
+            case 'C' -> "char";
+            case 'D' -> "double";
+            case 'F' -> "float";
+            case 'I' -> "int";
+            case 'J' -> "long";
+            case 'S' -> "short";
+            case 'Z' -> "boolean";
+            case 'L' -> {
+                final int end = descriptor.indexOf(';', index);
+                final String className = descriptor.substring(index, end).replace('/', '.');
+                index = end + 1;
+                yield className;
+            }
+            default -> throw new IllegalArgumentException("Unsupported method descriptor: " + descriptor);
+        };
+        return new TypeName(name + "[]".repeat(dimensions), index);
+    }
+
+    private record EventKey(Object startTime, long threadId, String method) {}
+
+    private record TypeName(String name, int nextIndex) {}
+}

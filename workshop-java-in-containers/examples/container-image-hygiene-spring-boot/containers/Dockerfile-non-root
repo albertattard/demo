@@ -1,0 +1,12 @@
+FROM container-registry.oracle.com/java/jdk:25.0.4.1
+WORKDIR "/opt/app"
+
+ARG JAR_FILE="./target/container-image-hygiene-spring-boot-*.jar"
+COPY --chown=10001:0 ["${JAR_FILE}", "app.jar"]
+
+# Use an arbitrary high numeric UID so the container does not run as root.
+USER 10001:0
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
